@@ -1,0 +1,39 @@
+aid: veli
+name: Veli
+description: >-
+  Veli provides crypto investment strategies via API, enabling platforms to
+  offer smart investment solutions while handling running investment strategies,
+  buying, selling, rebalancing, and fee collection behind the scenes.
+type: Index
+position: Consumer
+access: 3rd-Party
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+tags:
+  - Crypto
+  - Investment
+  - Finance
+url: >-
+  https://raw.githubusercontent.com/api-evangelist/veli/refs/heads/main/apis.yml
+created: '2026-03-16'
+modified: '2026-03-16'
+specificationVersion: '0.19'
+apis:
+  - aid: veli:veli
+    name: Veli API
+    description: >-
+      Veli provides crypto investment strategies via API, allowing platforms to
+      integrate smart investment solutions while keeping custody and execution
+      with the partner platform.
+    humanURL: https://veli.io/
+    tags:
+      - Crypto
+      - Investment
+    properties:
+      - type: Documentation
+        url: https://veli.io/
+common:
+  - type: Website
+    url: https://veli.io/
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
