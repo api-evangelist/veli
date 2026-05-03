@@ -1,0 +1,283 @@
+extends: spectral:oas
+rules:
+
+  # INFO
+  veli-info-title-exists:
+    description: "API must have an info.title"
+    severity: error
+    given: "$.info"
+    then:
+      field: title
+      function: truthy
+
+  veli-info-description-exists:
+    description: "API must have an info.description"
+    severity: warn
+    given: "$.info"
+    then:
+      field: description
+      function: truthy
+
+  veli-info-version-exists:
+    description: "API must have an info.version"
+    severity: error
+    given: "$.info"
+    then:
+      field: version
+      function: truthy
+
+  # OPENAPI VERSION
+  veli-openapi-version-3:
+    description: "API must use OpenAPI 3.x"
+    severity: error
+    given: "$"
+    then:
+      field: openapi
+      function: pattern
+      functionOptions:
+        match: "^3\\."
+
+  # SERVERS
+  veli-servers-exist:
+    description: "API must define at least one server"
+    severity: warn
+    given: "$"
+    then:
+      field: servers
+      function: truthy
+
+  veli-server-url-https:
+    description: "Server URL should use HTTPS"
+    severity: warn
+    given: "$.servers[*]"
+    then:
+      field: url
+      function: pattern
+      functionOptions:
+        match: "^https://"
+
+  # PATHS
+  veli-paths-exist:
+    description: "API must define at least one path"
+    severity: error
+    given: "$"
+    then:
+      field: paths
+      function: truthy
+
+  veli-path-lowercase:
+    description: "Path segments should use lowercase and hyphens"
+    severity: warn
+    given: "$.paths[*]~"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^/[a-z0-9/{}_-]*$"
+
+  # OPERATIONS
+  veli-operation-summary-exists:
+    description: "Every operation must have a summary"
+    severity: error
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: summary
+      function: truthy
+
+  veli-operation-description-exists:
+    description: "Every operation should have a description"
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: description
+      function: truthy
+
+  veli-operation-id-exists:
+    description: "Every operation must have an operationId"
+    severity: error
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: operationId
+      function: truthy
+
+  veli-operation-id-camel-case:
+    description: "operationId should be camelCase"
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete].operationId"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[a-z][a-zA-Z0-9]*$"
+
+  # TAGS
+  veli-operation-tags-exist:
+    description: "Every operation should have at least one tag"
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: tags
+      function: truthy
+
+  veli-tags-defined:
+    description: "All tags used in operations should be defined at root level"
+    severity: warn
+    given: "$"
+    then:
+      field: tags
+      function: truthy
+
+  # PARAMETERS
+  veli-parameter-description-exists:
+    description: "All parameters should have a description"
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete].parameters[*]"
+    then:
+      field: description
+      function: truthy
+
+  veli-parameter-schema-exists:
+    description: "All parameters must have a schema"
+    severity: error
+    given: "$.paths[*][get,post,put,patch,delete].parameters[*]"
+    then:
+      field: schema
+      function: truthy
+
+  # REQUEST BODIES
+  veli-request-body-description:
+    description: "Request bodies should have a description"
+    severity: warn
+    given: "$.paths[*][post,put,patch].requestBody"
+    then:
+      field: description
+      function: truthy
+
+  veli-request-body-content:
+    description: "Request bodies must define content"
+    severity: error
+    given: "$.paths[*][post,put,patch].requestBody"
+    then:
+      field: content
+      function: truthy
+
+  # RESPONSES
+  veli-responses-exist:
+    description: "Every operation must define responses"
+    severity: error
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: responses
+      function: truthy
+
+  veli-response-success-exists:
+    description: "Every operation must have a 2xx success response"
+    severity: error
+    given: "$.paths[*][get,post,put,patch,delete].responses"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          anyOf:
+            - required: ["200"]
+            - required: ["201"]
+            - required: ["204"]
+
+  veli-response-description-exists:
+    description: "All responses must have a description"
+    severity: error
+    given: "$.paths[*][get,post,put,patch,delete].responses[*]"
+    then:
+      field: description
+      function: truthy
+
+  # SCHEMAS
+  veli-schema-description-exists:
+    description: "All named schemas should have a description"
+    severity: warn
+    given: "$.components.schemas[*]"
+    then:
+      field: description
+      function: truthy
+
+  veli-schema-properties-described:
+    description: "Schema properties should have descriptions"
+    severity: warn
+    given: "$.components.schemas[*].properties[*]"
+    then:
+      field: description
+      function: truthy
+
+  # SECURITY
+  veli-security-defined:
+    description: "API should define security schemes"
+    severity: warn
+    given: "$.components"
+    then:
+      field: securitySchemes
+      function: truthy
+
+  veli-security-applied:
+    description: "API should apply security at the root level or per operation"
+    severity: warn
+    given: "$"
+    then:
+      field: security
+      function: truthy
+
+  veli-bearer-auth-scheme:
+    description: "Bearer auth should use http type with bearer scheme"
+    severity: error
+    given: "$.components.securitySchemes[?(@.type=='http')]"
+    then:
+      field: scheme
+      function: pattern
+      functionOptions:
+        match: "^bearer$"
+
+  # CRYPTO/FINANCE-SPECIFIC
+  veli-portfolio-response-schema:
+    description: "Portfolio endpoints should return schema-referenced responses"
+    severity: warn
+    given: "$.paths['/portfolios'][get,post].responses[200,201].content['application/json'].schema"
+    then:
+      function: truthy
+
+  veli-strategy-id-parameter:
+    description: "Strategy path parameters should be named strategyId"
+    severity: warn
+    given: "$.paths['/strategies/{strategyId}'][*].parameters[?(@.in=='path')]"
+    then:
+      field: name
+      function: pattern
+      functionOptions:
+        match: "^strategyId$"
+
+  veli-portfolio-id-parameter:
+    description: "Portfolio path parameters should be named portfolioId"
+    severity: warn
+    given: "$.paths['/portfolios/{portfolioId}'][*].parameters[?(@.in=='path')]"
+    then:
+      field: name
+      function: pattern
+      functionOptions:
+        match: "^portfolioId$"
+
+  # GENERAL QUALITY
+  veli-no-empty-paths:
+    description: "Paths object should not be empty"
+    severity: error
+    given: "$.paths"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          minProperties: 1
+
+  veli-components-schemas-exist:
+    description: "API should define reusable schemas in components"
+    severity: warn
+    given: "$.components"
+    then:
+      field: schemas
+      function: truthy

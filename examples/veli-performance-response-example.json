@@ -1,0 +1,9 @@
+{
+  "portfolioId": "strat-btc-eth-index",
+  "period": "1m",
+  "totalReturn": 0.08,
+  "annualizedReturn": 0.96,
+  "sharpeRatio": 1.8,
+  "startValue": 4861.81,
+  "endValue": 5250.75
+}

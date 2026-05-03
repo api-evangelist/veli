@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/veli/refs/heads/main/json-schema/veli-portfolio-schema.json",
+  "title": "Portfolio",
+  "description": "User investment portfolio",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Portfolio identifier",
+      "example": "port-abc123"
+    },
+    "userId": {
+      "type": "string",
+      "description": "End-user identifier from partner platform",
+      "example": "user-xyz789"
+    },
+    "strategyId": {
+      "type": "string",
+      "description": "Assigned investment strategy",
+      "example": "strat-btc-eth-index"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "paused",
+        "closed"
+      ],
+      "description": "Portfolio status",
+      "example": "active"
+    },
+    "totalValue": {
+      "type": "number",
+      "description": "Current total portfolio value",
+      "example": 5250.75
+    },
+    "currency": {
+      "type": "string",
+      "description": "Base currency for valuation",
+      "example": "USD"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Portfolio creation timestamp"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last update timestamp"
+    }
+  }
+}

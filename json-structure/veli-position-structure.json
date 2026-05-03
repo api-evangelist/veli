@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/veli/refs/heads/main/json-structure/veli-position-structure.json",
+  "name": "Position",
+  "description": "Current asset position in a portfolio",
+  "type": "object",
+  "properties": {
+    "symbol": {
+      "type": "string",
+      "description": "Crypto asset symbol",
+      "example": "BTC"
+    },
+    "quantity": {
+      "type": "double",
+      "description": "Number of units held",
+      "example": 0.045
+    },
+    "averageCost": {
+      "type": "double",
+      "description": "Average cost per unit in base currency",
+      "example": 42000.0
+    },
+    "currentPrice": {
+      "type": "double",
+      "description": "Current market price per unit",
+      "example": 68000.0
+    },
+    "currentValue": {
+      "type": "double",
+      "description": "Current total position value",
+      "example": 3060.0
+    },
+    "unrealizedPnL": {
+      "type": "double",
+      "description": "Unrealized profit/loss",
+      "example": 1170.0
+    },
+    "allocationPct": {
+      "type": "double",
+      "description": "Actual allocation percentage",
+      "example": 0.583
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/veli/refs/heads/main/json-schema/veli-asset-allocation-schema.json",
+  "title": "AssetAllocation",
+  "description": "Asset allocation within a strategy",
+  "type": "object",
+  "properties": {
+    "symbol": {
+      "type": "string",
+      "description": "Crypto asset symbol",
+      "example": "BTC"
+    },
+    "name": {
+      "type": "string",
+      "description": "Asset name",
+      "example": "Bitcoin"
+    },
+    "weight": {
+      "type": "number",
+      "description": "Target allocation weight (0-1)",
+      "minimum": 0,
+      "maximum": 1,
+      "example": 0.6
+    }
+  }
+}

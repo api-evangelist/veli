@@ -1,0 +1,9 @@
+{
+  "symbol": "BTC",
+  "quantity": 0.045,
+  "averageCost": 42000.0,
+  "currentPrice": 68000.0,
+  "currentValue": 3060.0,
+  "unrealizedPnL": 1170.0,
+  "allocationPct": 0.583
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/veli/refs/heads/main/json-structure/veli-order-structure.json",
+  "name": "Order",
+  "description": "Buy or sell order signal from Veli strategy engine",
+  "type": "object",
+  "properties": {
+    "side": {
+      "type": "string",
+      "enum": [
+        "buy",
+        "sell"
+      ],
+      "description": "Order side",
+      "example": "sell"
+    },
+    "symbol": {
+      "type": "string",
+      "description": "Asset to trade",
+      "example": "BTC"
+    },
+    "quantity": {
+      "type": "double",
+      "description": "Quantity to trade",
+      "example": 0.005
+    },
+    "estimatedValue": {
+      "type": "double",
+      "description": "Estimated order value in base currency",
+      "example": 340.0
+    }
+  }
+}

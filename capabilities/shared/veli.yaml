@@ -1,0 +1,152 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Veli API"
+  description: >-
+    Shared per-API definition for the Veli crypto investment strategy API.
+    Provides strategy discovery, portfolio creation, automated rebalancing,
+    position tracking, and performance reporting for crypto investment platforms.
+  tags:
+    - Crypto
+    - DeFi
+    - Finance
+    - Investment
+    - Portfolio Management
+
+auth:
+  - name: BearerAuth
+    type: http
+    scheme: bearer
+    bind: VELI_API_KEY
+
+operations:
+  - name: list-strategies
+    description: "List available crypto investment strategies with filtering by category and risk level"
+    method: GET
+    path: /strategies
+    parameters:
+      - name: category
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: risk
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+
+  - name: get-strategy
+    description: "Get details for a specific investment strategy including allocations and performance"
+    method: GET
+    path: /strategies/{strategyId}
+    parameters:
+      - name: strategyId
+        in: path
+        required: true
+        schema:
+          type: string
+
+  - name: list-portfolios
+    description: "List portfolios for a user or filtered by strategy"
+    method: GET
+    path: /portfolios
+    parameters:
+      - name: userId
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: strategyId
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+
+  - name: create-portfolio
+    description: "Create a new investment portfolio for a user based on a strategy"
+    method: POST
+    path: /portfolios
+    requestBody:
+      required: true
+      contentType: application/json
+
+  - name: get-portfolio
+    description: "Get current portfolio details including status and value"
+    method: GET
+    path: /portfolios/{portfolioId}
+    parameters:
+      - name: portfolioId
+        in: path
+        required: true
+        schema:
+          type: string
+
+  - name: close-portfolio
+    description: "Close and liquidate an investment portfolio"
+    method: DELETE
+    path: /portfolios/{portfolioId}
+    parameters:
+      - name: portfolioId
+        in: path
+        required: true
+        schema:
+          type: string
+
+  - name: get-positions
+    description: "Get current asset positions in a portfolio with quantities and values"
+    method: GET
+    path: /portfolios/{portfolioId}/positions
+    parameters:
+      - name: portfolioId
+        in: path
+        required: true
+        schema:
+          type: string
+
+  - name: rebalance-portfolio
+    description: "Trigger a portfolio rebalance to restore target strategy allocations"
+    method: POST
+    path: /portfolios/{portfolioId}/rebalance
+    parameters:
+      - name: portfolioId
+        in: path
+        required: true
+        schema:
+          type: string
+
+  - name: get-performance
+    description: "Get portfolio performance metrics for a given time period"
+    method: GET
+    path: /portfolios/{portfolioId}/performance
+    parameters:
+      - name: portfolioId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: period
+        in: query
+        required: false
+        schema:
+          type: string

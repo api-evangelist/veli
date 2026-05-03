@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/veli/refs/heads/main/json-structure/veli-create-portfolio-request-structure.json",
+  "name": "CreatePortfolioRequest",
+  "description": "Request body to create a new portfolio",
+  "type": "object",
+  "properties": {
+    "userId": {
+      "type": "string",
+      "description": "End-user identifier",
+      "example": "user-xyz789"
+    },
+    "strategyId": {
+      "type": "string",
+      "description": "Strategy to assign to portfolio",
+      "example": "strat-btc-eth-index"
+    },
+    "initialAmount": {
+      "type": "double",
+      "description": "Initial investment amount",
+      "example": 1000.0
+    },
+    "currency": {
+      "type": "string",
+      "description": "Currency of the initial investment",
+      "example": "USD"
+    }
+  },
+  "required": [
+    "userId",
+    "strategyId",
+    "initialAmount",
+    "currency"
+  ]
+}

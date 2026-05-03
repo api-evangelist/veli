@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/veli/refs/heads/main/json-schema/veli-performance-response-schema.json",
+  "title": "PerformanceResponse",
+  "description": "Portfolio performance metrics",
+  "type": "object",
+  "properties": {
+    "portfolioId": {
+      "type": "string"
+    },
+    "period": {
+      "type": "string",
+      "example": "1m"
+    },
+    "totalReturn": {
+      "type": "number",
+      "description": "Total return for period (e.g. 0.08 = 8%)",
+      "example": 0.08
+    },
+    "annualizedReturn": {
+      "type": "number",
+      "description": "Annualized return",
+      "example": 0.96
+    },
+    "sharpeRatio": {
+      "type": "number",
+      "description": "Sharpe ratio",
+      "example": 1.8
+    },
+    "startValue": {
+      "type": "number",
+      "description": "Portfolio value at start of period",
+      "example": 4861.81
+    },
+    "endValue": {
+      "type": "number",
+      "description": "Portfolio value at end of period",
+      "example": 5250.75
+    }
+  }
+}

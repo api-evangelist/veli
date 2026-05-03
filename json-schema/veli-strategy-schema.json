@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/veli/refs/heads/main/json-schema/veli-strategy-schema.json",
+  "title": "Strategy",
+  "description": "Investment strategy definition with allocations and rules",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Strategy identifier",
+      "example": "strat-btc-eth-index"
+    },
+    "name": {
+      "type": "string",
+      "description": "Strategy display name",
+      "example": "BTC-ETH Index"
+    },
+    "description": {
+      "type": "string",
+      "description": "Strategy description"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "index",
+        "theme",
+        "custom"
+      ],
+      "description": "Strategy category",
+      "example": "index"
+    },
+    "risk": {
+      "type": "string",
+      "enum": [
+        "conservative",
+        "moderate",
+        "aggressive"
+      ],
+      "description": "Risk level",
+      "example": "moderate"
+    },
+    "assets": {
+      "type": "array",
+      "description": "Asset allocations",
+      "items": {
+        "$ref": "#/components/schemas/AssetAllocation"
+      }
+    },
+    "rebalanceThreshold": {
+      "type": "number",
+      "description": "Drift threshold that triggers rebalancing (e.g. 0.05 = 5%)",
+      "example": 0.05
+    },
+    "managementFee": {
+      "type": "number",
+      "description": "Annual management fee rate (e.g. 0.01 = 1%)",
+      "example": 0.01
+    },
+    "performanceYTD": {
+      "type": "number",
+      "description": "Year-to-date return",
+      "example": 0.23
+    },
+    "performanceAllTime": {
+      "type": "number",
+      "description": "All-time return",
+      "example": 1.45
+    }
+  }
+}

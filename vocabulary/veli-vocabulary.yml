@@ -1,0 +1,241 @@
+vocabulary: "1.0.0"
+
+info:
+  provider: "Veli"
+  description: >-
+    Unified vocabulary for the Veli crypto investment strategy API covering
+    strategy discovery, portfolio management, asset positions, automated
+    rebalancing, and performance reporting for partner fintech platforms.
+  created: "2026-05-03"
+  modified: "2026-05-03"
+
+operational:
+  apis:
+    - name: Veli API
+      namespace: veli
+      version: "1.0"
+      baseUrl: "https://api.veli.io/v1"
+      status: active
+
+  resources:
+    - name: strategies
+      description: "Crypto investment strategies including index, theme, and custom portfolios"
+      actions: [list, get]
+    - name: portfolios
+      description: "User investment portfolios built on top of Veli strategies"
+      actions: [list, create, get, close]
+    - name: positions
+      description: "Current asset holdings within a portfolio with quantities and values"
+      actions: [get]
+    - name: rebalance
+      description: "Portfolio rebalancing operations to restore target allocations"
+      actions: [trigger]
+    - name: performance
+      description: "Portfolio performance metrics, returns, and allocation breakdowns"
+      actions: [get]
+
+  actions:
+    - name: list
+      httpMethod: GET
+      pattern: read
+      description: "List strategies or portfolios with optional filtering"
+    - name: get
+      httpMethod: GET
+      pattern: read
+      description: "Retrieve a single resource by identifier"
+    - name: create
+      httpMethod: POST
+      pattern: write
+      description: "Create a new portfolio from a strategy"
+    - name: close
+      httpMethod: DELETE
+      pattern: write
+      description: "Close and liquidate a portfolio"
+    - name: trigger
+      httpMethod: POST
+      pattern: write
+      description: "Trigger a portfolio rebalance operation"
+
+  schemas:
+    strategies:
+      - name: Strategy
+        description: "Crypto investment strategy with allocations, risk profile, and performance data"
+        key_properties: [strategyId, name, category, riskLevel, description, allocations, currency, minInvestment]
+      - name: AssetAllocation
+        description: "Single asset's target weight within a strategy"
+        key_properties: [asset, symbol, targetWeight, currentWeight]
+    portfolios:
+      - name: Portfolio
+        description: "User investment portfolio tracking strategy, value, and status"
+        key_properties: [portfolioId, userId, strategyId, status, totalValue, currency, createdAt, updatedAt]
+      - name: CreatePortfolioRequest
+        description: "Request body for creating a new portfolio"
+        key_properties: [userId, strategyId, initialAmount, currency]
+    positions:
+      - name: Position
+        description: "Current asset position in a portfolio with quantity and market value"
+        key_properties: [asset, symbol, quantity, currentPrice, currentValue, targetWeight, currentWeight]
+      - name: Order
+        description: "Buy or sell order generated during rebalancing"
+        key_properties: [orderId, asset, symbol, side, quantity, price, status, executedAt]
+    performance:
+      - name: PerformanceResponse
+        description: "Portfolio performance metrics including returns and allocation data"
+        key_properties: [portfolioId, period, totalReturn, totalReturnPct, currentValue, startValue, allocation]
+
+  parameters:
+    strategy_filters:
+      - name: category
+        type: string
+        description: "Strategy category filter (index, theme, custom)"
+      - name: risk
+        type: string
+        description: "Risk level filter (low, medium, high)"
+    portfolio_filters:
+      - name: userId
+        type: string
+        description: "Filter portfolios by user identifier"
+      - name: strategyId
+        type: string
+        description: "Filter portfolios by strategy identifier"
+    pagination:
+      - name: limit
+        type: integer
+        description: "Maximum number of results to return"
+      - name: offset
+        type: integer
+        description: "Number of results to skip for pagination"
+    performance_filters:
+      - name: period
+        type: string
+        description: "Performance time period (1d, 7d, 30d, 90d, 1y, all)"
+
+  enums:
+    strategy_categories:
+      - index
+      - theme
+      - custom
+    risk_levels:
+      - low
+      - medium
+      - high
+    portfolio_statuses:
+      - active
+      - rebalancing
+      - closed
+    order_sides:
+      - buy
+      - sell
+    order_statuses:
+      - pending
+      - executed
+      - failed
+    performance_periods:
+      - 1d
+      - 7d
+      - 30d
+      - 90d
+      - 1y
+      - all
+    currencies:
+      - USD
+      - EUR
+      - USDC
+      - BTC
+
+  authentication:
+    schemes:
+      - name: BearerAuth
+        type: http
+        scheme: bearer
+        description: "JWT bearer token passed in Authorization header"
+
+capability:
+  workflows:
+    - name: Crypto Investment
+      file: capabilities/crypto-investment.yaml
+      description: >-
+        End-to-end crypto investment workflow combining strategy discovery,
+        portfolio creation, position tracking, rebalancing, and performance
+        reporting for fintech platforms and exchanges.
+      apis_combined:
+        - veli
+      tool_count: 8
+      personas:
+        - Fintech Platform Developer
+        - End Investor
+        - Portfolio Manager
+
+  personas:
+    - id: fintech-platform-developer
+      name: Fintech Platform Developer
+      description: >-
+        Integrates Veli into a crypto exchange, neobank, or wealth platform
+        to offer automated investment strategies to end users.
+      workflows:
+        - Crypto Investment
+    - id: end-investor
+      name: End Investor
+      description: >-
+        Creates and monitors crypto investment portfolios, reviews performance,
+        and checks position allocations through a partner platform.
+      workflows:
+        - Crypto Investment
+    - id: portfolio-manager
+      name: Portfolio Manager
+      description: >-
+        Manages strategy selection, monitors portfolio drift, triggers
+        rebalancing, and reviews performance metrics across user accounts.
+      workflows:
+        - Crypto Investment
+
+  domains:
+    - name: Strategy Discovery
+      description: "Browsing and selecting crypto investment strategies"
+      resources: [strategies]
+      workflows: [Crypto Investment]
+    - name: Portfolio Management
+      description: "Creating, monitoring, and closing investment portfolios"
+      resources: [portfolios, positions]
+      workflows: [Crypto Investment]
+    - name: Rebalancing and Performance
+      description: "Automated rebalancing and performance tracking"
+      resources: [rebalance, performance]
+      workflows: [Crypto Investment]
+
+  namespaces:
+    consumed:
+      - veli
+    rest_exposed:
+      - name: crypto-investment-api
+        port: 8080
+    mcp_exposed:
+      - name: crypto-investment-mcp
+        port: 9090
+
+  binds:
+    - name: VELI_API_KEY
+      description: "Veli API bearer token"
+      workflows: [Crypto Investment]
+
+crossReference:
+  - resource: strategies
+    operations: [listStrategies, getStrategy]
+    workflows: [Crypto Investment]
+    personas: [Fintech Platform Developer, End Investor, Portfolio Manager]
+  - resource: portfolios
+    operations: [listPortfolios, createPortfolio, getPortfolio, closePortfolio]
+    workflows: [Crypto Investment]
+    personas: [Fintech Platform Developer, End Investor, Portfolio Manager]
+  - resource: positions
+    operations: [getPositions]
+    workflows: [Crypto Investment]
+    personas: [End Investor, Portfolio Manager]
+  - resource: rebalance
+    operations: [rebalancePortfolio]
+    workflows: [Crypto Investment]
+    personas: [Portfolio Manager]
+  - resource: performance
+    operations: [getPerformance]
+    workflows: [Crypto Investment]
+    personas: [End Investor, Portfolio Manager, Fintech Platform Developer]

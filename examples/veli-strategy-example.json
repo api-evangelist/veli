@@ -1,0 +1,14 @@
+{
+  "id": "strat-btc-eth-index",
+  "name": "BTC-ETH Index",
+  "description": "Market-cap weighted crypto index strategy",
+  "category": "index",
+  "risk": "moderate",
+  "assets": [
+    "sample"
+  ],
+  "rebalanceThreshold": 0.05,
+  "managementFee": 0.01,
+  "performanceYTD": 0.23,
+  "performanceAllTime": 1.45
+}
