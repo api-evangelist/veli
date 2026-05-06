@@ -1,0 +1,474 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Veli API
+  description: The Veli API enables financial platforms and crypto exchanges to integrate automated investment strategies
+    for their users. Partners retain custody and execution while Veli handles strategy logic, rebalancing signals, fee collection,
+    and performance reporting for crypto portfolios.
+  tags:
+  - Veli
+  - API
+  created: '2026-05-06'
+  modified: '2026-05-06'
+capability:
+  consumes:
+  - type: http
+    namespace: veli
+    baseUri: https://api.veli.io/v1
+    description: Veli API HTTP API.
+    authentication:
+      type: bearer
+      token: '{{VELI_TOKEN}}'
+    resources:
+    - name: strategies
+      path: /strategies
+      operations:
+      - name: liststrategies
+        method: GET
+        description: Veli List Strategies
+        inputParameters:
+        - name: category
+          in: query
+          type: string
+          description: 'Filter by strategy category: index, theme, or custom'
+        - name: risk
+          in: query
+          type: string
+          description: 'Filter by risk level: conservative, moderate, aggressive'
+        - name: limit
+          in: query
+          type: integer
+        - name: offset
+          in: query
+          type: integer
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: strategies-strategyid
+      path: /strategies/{strategyId}
+      operations:
+      - name: getstrategy
+        method: GET
+        description: Veli Get Strategy
+        inputParameters:
+        - name: strategyId
+          in: path
+          type: string
+          required: true
+          description: Strategy identifier
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: portfolios
+      path: /portfolios
+      operations:
+      - name: listportfolios
+        method: GET
+        description: Veli List Portfolios
+        inputParameters:
+        - name: userId
+          in: query
+          type: string
+          description: Filter portfolios by end-user ID
+        - name: strategyId
+          in: query
+          type: string
+          description: Filter portfolios by strategy
+        - name: limit
+          in: query
+          type: integer
+        - name: offset
+          in: query
+          type: integer
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createportfolio
+        method: POST
+        description: Veli Create Portfolio
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: portfolios-portfolioid
+      path: /portfolios/{portfolioId}
+      operations:
+      - name: getportfolio
+        method: GET
+        description: Veli Get Portfolio
+        inputParameters:
+        - name: portfolioId
+          in: path
+          type: string
+          required: true
+          description: Portfolio identifier
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: closeportfolio
+        method: DELETE
+        description: Veli Close Portfolio
+        inputParameters:
+        - name: portfolioId
+          in: path
+          type: string
+          required: true
+          description: Portfolio identifier
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: portfolios-portfolioid-positions
+      path: /portfolios/{portfolioId}/positions
+      operations:
+      - name: getpositions
+        method: GET
+        description: Veli Get Positions
+        inputParameters:
+        - name: portfolioId
+          in: path
+          type: string
+          required: true
+          description: Portfolio identifier
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: portfolios-portfolioid-rebalance
+      path: /portfolios/{portfolioId}/rebalance
+      operations:
+      - name: rebalanceportfolio
+        method: POST
+        description: Veli Rebalance Portfolio
+        inputParameters:
+        - name: portfolioId
+          in: path
+          type: string
+          required: true
+          description: Portfolio identifier
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: portfolios-portfolioid-performance
+      path: /portfolios/{portfolioId}/performance
+      operations:
+      - name: getperformance
+        method: GET
+        description: Veli Get Performance
+        inputParameters:
+        - name: portfolioId
+          in: path
+          type: string
+          required: true
+          description: Portfolio identifier
+        - name: period
+          in: query
+          type: string
+          description: 'Time period: 1d, 7d, 1m, 3m, 1y, all'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    port: 8080
+    namespace: veli-rest
+    description: REST adapter for Veli API.
+    resources:
+    - path: /strategies
+      name: liststrategies
+      operations:
+      - method: GET
+        name: liststrategies
+        description: Veli List Strategies
+        call: veli.liststrategies
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /strategies/{strategyId}
+      name: getstrategy
+      operations:
+      - method: GET
+        name: getstrategy
+        description: Veli Get Strategy
+        call: veli.getstrategy
+        with:
+          strategyId: rest.strategyId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /portfolios
+      name: listportfolios
+      operations:
+      - method: GET
+        name: listportfolios
+        description: Veli List Portfolios
+        call: veli.listportfolios
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /portfolios
+      name: createportfolio
+      operations:
+      - method: POST
+        name: createportfolio
+        description: Veli Create Portfolio
+        call: veli.createportfolio
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /portfolios/{portfolioId}
+      name: getportfolio
+      operations:
+      - method: GET
+        name: getportfolio
+        description: Veli Get Portfolio
+        call: veli.getportfolio
+        with:
+          portfolioId: rest.portfolioId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /portfolios/{portfolioId}
+      name: closeportfolio
+      operations:
+      - method: DELETE
+        name: closeportfolio
+        description: Veli Close Portfolio
+        call: veli.closeportfolio
+        with:
+          portfolioId: rest.portfolioId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /portfolios/{portfolioId}/positions
+      name: getpositions
+      operations:
+      - method: GET
+        name: getpositions
+        description: Veli Get Positions
+        call: veli.getpositions
+        with:
+          portfolioId: rest.portfolioId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /portfolios/{portfolioId}/rebalance
+      name: rebalanceportfolio
+      operations:
+      - method: POST
+        name: rebalanceportfolio
+        description: Veli Rebalance Portfolio
+        call: veli.rebalanceportfolio
+        with:
+          portfolioId: rest.portfolioId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /portfolios/{portfolioId}/performance
+      name: getperformance
+      operations:
+      - method: GET
+        name: getperformance
+        description: Veli Get Performance
+        call: veli.getperformance
+        with:
+          portfolioId: rest.portfolioId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    port: 9090
+    namespace: veli-mcp
+    transport: http
+    description: MCP adapter for Veli API for AI agent use.
+    tools:
+    - name: liststrategies
+      description: Veli List Strategies
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: veli.liststrategies
+      with:
+        category: tools.category
+        risk: tools.risk
+        limit: tools.limit
+        offset: tools.offset
+      inputParameters:
+      - name: category
+        type: string
+        description: 'Filter by strategy category: index, theme, or custom'
+      - name: risk
+        type: string
+        description: 'Filter by risk level: conservative, moderate, aggressive'
+      - name: limit
+        type: integer
+        description: limit
+      - name: offset
+        type: integer
+        description: offset
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getstrategy
+      description: Veli Get Strategy
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: veli.getstrategy
+      with:
+        strategyId: tools.strategyId
+      inputParameters:
+      - name: strategyId
+        type: string
+        description: Strategy identifier
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: listportfolios
+      description: Veli List Portfolios
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: veli.listportfolios
+      with:
+        userId: tools.userId
+        strategyId: tools.strategyId
+        limit: tools.limit
+        offset: tools.offset
+      inputParameters:
+      - name: userId
+        type: string
+        description: Filter portfolios by end-user ID
+      - name: strategyId
+        type: string
+        description: Filter portfolios by strategy
+      - name: limit
+        type: integer
+        description: limit
+      - name: offset
+        type: integer
+        description: offset
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: createportfolio
+      description: Veli Create Portfolio
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: veli.createportfolio
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getportfolio
+      description: Veli Get Portfolio
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: veli.getportfolio
+      with:
+        portfolioId: tools.portfolioId
+      inputParameters:
+      - name: portfolioId
+        type: string
+        description: Portfolio identifier
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: closeportfolio
+      description: Veli Close Portfolio
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: veli.closeportfolio
+      with:
+        portfolioId: tools.portfolioId
+      inputParameters:
+      - name: portfolioId
+        type: string
+        description: Portfolio identifier
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getpositions
+      description: Veli Get Positions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: veli.getpositions
+      with:
+        portfolioId: tools.portfolioId
+      inputParameters:
+      - name: portfolioId
+        type: string
+        description: Portfolio identifier
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: rebalanceportfolio
+      description: Veli Rebalance Portfolio
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: veli.rebalanceportfolio
+      with:
+        portfolioId: tools.portfolioId
+      inputParameters:
+      - name: portfolioId
+        type: string
+        description: Portfolio identifier
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getperformance
+      description: Veli Get Performance
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: veli.getperformance
+      with:
+        portfolioId: tools.portfolioId
+        period: tools.period
+      inputParameters:
+      - name: portfolioId
+        type: string
+        description: Portfolio identifier
+        required: true
+      - name: period
+        type: string
+        description: 'Time period: 1d, 7d, 1m, 3m, 1y, all'
+      outputParameters:
+      - type: object
+        mapping: $.
+binds:
+- namespace: env
+  keys:
+    VELI_TOKEN: VELI_TOKEN
