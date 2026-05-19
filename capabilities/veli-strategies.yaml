@@ -1,0 +1,137 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Veli API — Strategies
+  description: 'Veli API — Strategies. 2 operations. Lead operation: Veli List Strategies. Self-contained Naftiko capability
+    covering one Veli business surface.'
+  tags:
+  - Veli
+  - Strategies
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VELI_API_KEY: VELI_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: veli-strategies
+    baseUri: https://api.veli.io/v1
+    description: Veli API — Strategies business capability. Self-contained, no shared references.
+    resources:
+    - name: strategies
+      path: /strategies
+      operations:
+      - name: liststrategies
+        method: GET
+        description: Veli List Strategies
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: category
+          in: query
+          type: string
+          description: 'Filter by strategy category: index, theme, or custom'
+        - name: risk
+          in: query
+          type: string
+          description: 'Filter by risk level: conservative, moderate, aggressive'
+        - name: limit
+          in: query
+          type: integer
+        - name: offset
+          in: query
+          type: integer
+    - name: strategies-strategyId
+      path: /strategies/{strategyId}
+      operations:
+      - name: getstrategy
+        method: GET
+        description: Veli Get Strategy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: strategyId
+          in: path
+          type: string
+          description: Strategy identifier
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.VELI_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: veli-strategies-rest
+    port: 8080
+    description: REST adapter for Veli API — Strategies. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/strategies
+      name: strategies
+      description: REST surface for strategies.
+      operations:
+      - method: GET
+        name: liststrategies
+        description: Veli List Strategies
+        call: veli-strategies.liststrategies
+        with:
+          category: rest.category
+          risk: rest.risk
+          limit: rest.limit
+          offset: rest.offset
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/strategies/{strategyid}
+      name: strategies-strategyid
+      description: REST surface for strategies-strategyId.
+      operations:
+      - method: GET
+        name: getstrategy
+        description: Veli Get Strategy
+        call: veli-strategies.getstrategy
+        with:
+          strategyId: rest.strategyId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: veli-strategies-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Veli API — Strategies. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: veli-list-strategies
+      description: Veli List Strategies
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: veli-strategies.liststrategies
+      with:
+        category: tools.category
+        risk: tools.risk
+        limit: tools.limit
+        offset: tools.offset
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: veli-get-strategy
+      description: Veli Get Strategy
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: veli-strategies.getstrategy
+      with:
+        strategyId: tools.strategyId
+      outputParameters:
+      - type: object
+        mapping: $.

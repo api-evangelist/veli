@@ -1,0 +1,86 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Veli API — Performance
+  description: 'Veli API — Performance. 1 operations. Lead operation: Veli Get Performance. Self-contained Naftiko capability
+    covering one Veli business surface.'
+  tags:
+  - Veli
+  - Performance
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VELI_API_KEY: VELI_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: veli-performance
+    baseUri: https://api.veli.io/v1
+    description: Veli API — Performance business capability. Self-contained, no shared references.
+    resources:
+    - name: portfolios-portfolioId-performance
+      path: /portfolios/{portfolioId}/performance
+      operations:
+      - name: getperformance
+        method: GET
+        description: Veli Get Performance
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: portfolioId
+          in: path
+          type: string
+          description: Portfolio identifier
+          required: true
+        - name: period
+          in: query
+          type: string
+          description: 'Time period: 1d, 7d, 1m, 3m, 1y, all'
+    authentication:
+      type: bearer
+      token: '{{env.VELI_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: veli-performance-rest
+    port: 8080
+    description: REST adapter for Veli API — Performance. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/portfolios/{portfolioid}/performance
+      name: portfolios-portfolioid-performance
+      description: REST surface for portfolios-portfolioId-performance.
+      operations:
+      - method: GET
+        name: getperformance
+        description: Veli Get Performance
+        call: veli-performance.getperformance
+        with:
+          portfolioId: rest.portfolioId
+          period: rest.period
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: veli-performance-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Veli API — Performance. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: veli-get-performance
+      description: Veli Get Performance
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: veli-performance.getperformance
+      with:
+        portfolioId: tools.portfolioId
+        period: tools.period
+      outputParameters:
+      - type: object
+        mapping: $.

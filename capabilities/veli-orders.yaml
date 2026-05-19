@@ -1,0 +1,80 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Veli API — Orders
+  description: 'Veli API — Orders. 1 operations. Lead operation: Veli Rebalance Portfolio. Self-contained Naftiko capability
+    covering one Veli business surface.'
+  tags:
+  - Veli
+  - Orders
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VELI_API_KEY: VELI_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: veli-orders
+    baseUri: https://api.veli.io/v1
+    description: Veli API — Orders business capability. Self-contained, no shared references.
+    resources:
+    - name: portfolios-portfolioId-rebalance
+      path: /portfolios/{portfolioId}/rebalance
+      operations:
+      - name: rebalanceportfolio
+        method: POST
+        description: Veli Rebalance Portfolio
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: portfolioId
+          in: path
+          type: string
+          description: Portfolio identifier
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.VELI_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: veli-orders-rest
+    port: 8080
+    description: REST adapter for Veli API — Orders. One Spectral-compliant resource per consumed operation, prefixed with
+      /v1.
+    resources:
+    - path: /v1/portfolios/{portfolioid}/rebalance
+      name: portfolios-portfolioid-rebalance
+      description: REST surface for portfolios-portfolioId-rebalance.
+      operations:
+      - method: POST
+        name: rebalanceportfolio
+        description: Veli Rebalance Portfolio
+        call: veli-orders.rebalanceportfolio
+        with:
+          portfolioId: rest.portfolioId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: veli-orders-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Veli API — Orders. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: veli-rebalance-portfolio
+      description: Veli Rebalance Portfolio
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: veli-orders.rebalanceportfolio
+      with:
+        portfolioId: tools.portfolioId
+      outputParameters:
+      - type: object
+        mapping: $.

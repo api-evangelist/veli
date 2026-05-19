@@ -1,0 +1,249 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Veli API — Portfolios
+  description: 'Veli API — Portfolios. 5 operations. Lead operation: Veli List Portfolios. Self-contained Naftiko capability
+    covering one Veli business surface.'
+  tags:
+  - Veli
+  - Portfolios
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    VELI_API_KEY: VELI_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: veli-portfolios
+    baseUri: https://api.veli.io/v1
+    description: Veli API — Portfolios business capability. Self-contained, no shared references.
+    resources:
+    - name: portfolios
+      path: /portfolios
+      operations:
+      - name: listportfolios
+        method: GET
+        description: Veli List Portfolios
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: userId
+          in: query
+          type: string
+          description: Filter portfolios by end-user ID
+        - name: strategyId
+          in: query
+          type: string
+          description: Filter portfolios by strategy
+        - name: limit
+          in: query
+          type: integer
+        - name: offset
+          in: query
+          type: integer
+      - name: createportfolio
+        method: POST
+        description: Veli Create Portfolio
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: portfolios-portfolioId
+      path: /portfolios/{portfolioId}
+      operations:
+      - name: getportfolio
+        method: GET
+        description: Veli Get Portfolio
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: portfolioId
+          in: path
+          type: string
+          description: Portfolio identifier
+          required: true
+      - name: closeportfolio
+        method: DELETE
+        description: Veli Close Portfolio
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: portfolioId
+          in: path
+          type: string
+          description: Portfolio identifier
+          required: true
+    - name: portfolios-portfolioId-rebalance
+      path: /portfolios/{portfolioId}/rebalance
+      operations:
+      - name: rebalanceportfolio
+        method: POST
+        description: Veli Rebalance Portfolio
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: portfolioId
+          in: path
+          type: string
+          description: Portfolio identifier
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.VELI_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: veli-portfolios-rest
+    port: 8080
+    description: REST adapter for Veli API — Portfolios. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/portfolios
+      name: portfolios
+      description: REST surface for portfolios.
+      operations:
+      - method: GET
+        name: listportfolios
+        description: Veli List Portfolios
+        call: veli-portfolios.listportfolios
+        with:
+          userId: rest.userId
+          strategyId: rest.strategyId
+          limit: rest.limit
+          offset: rest.offset
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createportfolio
+        description: Veli Create Portfolio
+        call: veli-portfolios.createportfolio
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/portfolios/{portfolioid}
+      name: portfolios-portfolioid
+      description: REST surface for portfolios-portfolioId.
+      operations:
+      - method: GET
+        name: getportfolio
+        description: Veli Get Portfolio
+        call: veli-portfolios.getportfolio
+        with:
+          portfolioId: rest.portfolioId
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: closeportfolio
+        description: Veli Close Portfolio
+        call: veli-portfolios.closeportfolio
+        with:
+          portfolioId: rest.portfolioId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/portfolios/{portfolioid}/rebalance
+      name: portfolios-portfolioid-rebalance
+      description: REST surface for portfolios-portfolioId-rebalance.
+      operations:
+      - method: POST
+        name: rebalanceportfolio
+        description: Veli Rebalance Portfolio
+        call: veli-portfolios.rebalanceportfolio
+        with:
+          portfolioId: rest.portfolioId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: veli-portfolios-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Veli API — Portfolios. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: veli-list-portfolios
+      description: Veli List Portfolios
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: veli-portfolios.listportfolios
+      with:
+        userId: tools.userId
+        strategyId: tools.strategyId
+        limit: tools.limit
+        offset: tools.offset
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: veli-create-portfolio
+      description: Veli Create Portfolio
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: veli-portfolios.createportfolio
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: veli-get-portfolio
+      description: Veli Get Portfolio
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: veli-portfolios.getportfolio
+      with:
+        portfolioId: tools.portfolioId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: veli-close-portfolio
+      description: Veli Close Portfolio
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: veli-portfolios.closeportfolio
+      with:
+        portfolioId: tools.portfolioId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: veli-rebalance-portfolio
+      description: Veli Rebalance Portfolio
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: veli-portfolios.rebalanceportfolio
+      with:
+        portfolioId: tools.portfolioId
+      outputParameters:
+      - type: object
+        mapping: $.
