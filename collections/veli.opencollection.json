@@ -1,0 +1,261 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Veli API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Strategies",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Veli List Strategies",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.veli.io/v1/strategies",
+            "params": [
+              {
+                "name": "category",
+                "value": "",
+                "type": "query",
+                "description": "Filter by strategy category: index, theme, or custom"
+              },
+              {
+                "name": "risk",
+                "value": "",
+                "type": "query",
+                "description": "Filter by risk level: conservative, moderate, aggressive"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns all available investment strategies including index funds, theme portfolios, and custom strategies. Each strategy includes allocation weights, rebalancing rules, and performance history."
+        },
+        {
+          "info": {
+            "name": "Veli Get Strategy",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.veli.io/v1/strategies/:strategyId",
+            "params": [
+              {
+                "name": "strategyId",
+                "value": "strat-btc-eth-index",
+                "type": "path",
+                "description": "Strategy identifier"
+              }
+            ]
+          },
+          "docs": "Returns complete details for a specific investment strategy including asset allocation, rebalancing rules, fee structure, and performance metrics."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Portfolios",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Veli List Portfolios",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.veli.io/v1/portfolios",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "Filter portfolios by end-user ID"
+              },
+              {
+                "name": "strategyId",
+                "value": "",
+                "type": "query",
+                "description": "Filter portfolios by strategy"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns all portfolios for the authenticated partner, with portfolio values, strategy, and performance summary for each."
+        },
+        {
+          "info": {
+            "name": "Veli Create Portfolio",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.veli.io/v1/portfolios",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new investment portfolio for an end-user, assigning it to a strategy and setting an initial investment amount. Returns the portfolio ID and initial buy orders to execute."
+        },
+        {
+          "info": {
+            "name": "Veli Get Portfolio",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.veli.io/v1/portfolios/:portfolioId",
+            "params": [
+              {
+                "name": "portfolioId",
+                "value": "port-abc123",
+                "type": "path",
+                "description": "Portfolio identifier"
+              }
+            ]
+          },
+          "docs": "Returns complete portfolio details including current value, asset allocations, positions, performance metrics, and transaction history."
+        },
+        {
+          "info": {
+            "name": "Veli Close Portfolio",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.veli.io/v1/portfolios/:portfolioId",
+            "params": [
+              {
+                "name": "portfolioId",
+                "value": "",
+                "type": "path",
+                "description": "Portfolio identifier"
+              }
+            ]
+          },
+          "docs": "Closes a portfolio and liquidates all positions. Returns sell orders to execute to return funds to the user."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Positions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Veli Get Positions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.veli.io/v1/portfolios/:portfolioId/positions",
+            "params": [
+              {
+                "name": "portfolioId",
+                "value": "port-abc123",
+                "type": "path",
+                "description": "Portfolio identifier"
+              }
+            ]
+          },
+          "docs": "Returns current asset positions in a portfolio including quantity, average cost, current value, unrealized P&L, and percentage allocation."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Orders",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Veli Rebalance Portfolio",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.veli.io/v1/portfolios/:portfolioId/rebalance",
+            "params": [
+              {
+                "name": "portfolioId",
+                "value": "",
+                "type": "path",
+                "description": "Portfolio identifier"
+              }
+            ]
+          },
+          "docs": "Triggers a manual rebalance of the portfolio to restore target allocations. Returns buy and sell orders to execute to achieve the target allocation."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Performance",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Veli Get Performance",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.veli.io/v1/portfolios/:portfolioId/performance",
+            "params": [
+              {
+                "name": "portfolioId",
+                "value": "port-abc123",
+                "type": "path",
+                "description": "Portfolio identifier"
+              },
+              {
+                "name": "period",
+                "value": "",
+                "type": "query",
+                "description": "Time period: 1d, 7d, 1m, 3m, 1y, all"
+              }
+            ]
+          },
+          "docs": "Returns portfolio performance metrics including total return, annualized return, Sharpe ratio, and time-series data for specified date ranges."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
