@@ -82,25 +82,25 @@ apis:
       - type: JSONStructure
         url: json-structure/veli-create-portfolio-request-structure.json
         title: Create Portfolio Request Structure
-      - type: Example
+      - type: Examples
         url: examples/veli-portfolio-example.json
         title: Portfolio Example
-      - type: Example
+      - type: Examples
         url: examples/veli-strategy-example.json
         title: Strategy Example
-      - type: Example
+      - type: Examples
         url: examples/veli-position-example.json
         title: Position Example
-      - type: Example
+      - type: Examples
         url: examples/veli-order-example.json
         title: Order Example
-      - type: Example
+      - type: Examples
         url: examples/veli-asset-allocation-example.json
         title: Asset Allocation Example
-      - type: Example
+      - type: Examples
         url: examples/veli-performance-response-example.json
         title: Performance Response Example
-      - type: Example
+      - type: Examples
         url: examples/veli-create-portfolio-request-example.json
         title: Create Portfolio Request Example
 common:
