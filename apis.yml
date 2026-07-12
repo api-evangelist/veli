@@ -104,6 +104,10 @@ apis:
         url: examples/veli-create-portfolio-request-example.json
         title: Create Portfolio Request Example
 common:
+  - type: DomainSecurity
+    url: security/veli-domain-security.yml
+  - type: Authentication
+    url: authentication/veli-authentication.yml
   - type: Website
     url: https://veli.io/
   - type: Portal
@@ -116,6 +120,8 @@ common:
   - type: Vocabulary
     url: vocabulary/veli-vocabulary.yml
     title: Veli Vocabulary
+  - url: https://veli.io/feed/
+    type: Blog
   - type: Features
     data:
       - name: Automated Investment Strategies
