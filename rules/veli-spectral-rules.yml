@@ -1,283 +1,301 @@
-extends: spectral:oas
+# veli — Spectral ruleset (strengthened)
+# Plain Spectral. Existing hand-authored rules preserved; measured rules added
+# from this provider's own OpenAPI conventions by strengthen_ruleset.py,
+# then self-validated against the spec.
+#
+# Provenance:
+#   - servers-https-only: 100% of servers already https (error)
+#   - servers-expected-domain: 1/1 servers on veli.io
+#   - path-params-casing: camel @ 100% (n=6)
+#   - query-params-casing: snake @ 78% (n=9)
+#   - operationid-casing: camel @ 100% (n=9)
+#   - schema-names-casing: pascal @ 100% (n=12)
+#   - schema-properties-casing: camel @ 52% (n=54)
+#   - security: global (root) — NOT emitting operation-security-required
+#   - pagination params observed: ['limit', 'offset']
+#   - merge: kept 31 existing, added 5 measured, upgraded 0
+#   - added: servers-expected-domain, query-params-casing, schema-names-casing, schema-properties-casing, no-empty-descriptions
+extends:
+  - spectral:oas
 rules:
-
-  # INFO
   veli-info-title-exists:
-    description: "API must have an info.title"
+    description: API must have an info.title
     severity: error
-    given: "$.info"
+    given: $.info
     then:
       field: title
       function: truthy
-
   veli-info-description-exists:
-    description: "API must have an info.description"
+    description: API must have an info.description
     severity: warn
-    given: "$.info"
+    given: $.info
     then:
       field: description
       function: truthy
-
   veli-info-version-exists:
-    description: "API must have an info.version"
+    description: API must have an info.version
     severity: error
-    given: "$.info"
+    given: $.info
     then:
       field: version
       function: truthy
-
-  # OPENAPI VERSION
   veli-openapi-version-3:
-    description: "API must use OpenAPI 3.x"
+    description: API must use OpenAPI 3.x
     severity: error
-    given: "$"
+    given: $
     then:
       field: openapi
       function: pattern
       functionOptions:
-        match: "^3\\."
-
-  # SERVERS
+        match: ^3\.
   veli-servers-exist:
-    description: "API must define at least one server"
+    description: API must define at least one server
     severity: warn
-    given: "$"
+    given: $
     then:
       field: servers
       function: truthy
-
   veli-server-url-https:
-    description: "Server URL should use HTTPS"
+    description: Server URL should use HTTPS
     severity: warn
-    given: "$.servers[*]"
+    given: $.servers[*]
     then:
       field: url
       function: pattern
       functionOptions:
-        match: "^https://"
-
-  # PATHS
+        match: ^https://
   veli-paths-exist:
-    description: "API must define at least one path"
+    description: API must define at least one path
     severity: error
-    given: "$"
+    given: $
     then:
       field: paths
       function: truthy
-
   veli-path-lowercase:
-    description: "Path segments should use lowercase and hyphens"
+    description: Path segments should use lowercase and hyphens
     severity: warn
-    given: "$.paths[*]~"
+    given: $.paths[*]~
     then:
       function: pattern
       functionOptions:
-        match: "^/[a-z0-9/{}_-]*$"
-
-  # OPERATIONS
+        match: ^/[a-z0-9/{}_-]*$
   veli-operation-summary-exists:
-    description: "Every operation must have a summary"
+    description: Every operation must have a summary
     severity: error
-    given: "$.paths[*][get,post,put,patch,delete]"
+    given: $.paths[*][get,post,put,patch,delete]
     then:
       field: summary
       function: truthy
-
   veli-operation-description-exists:
-    description: "Every operation should have a description"
+    description: Every operation should have a description
     severity: warn
-    given: "$.paths[*][get,post,put,patch,delete]"
+    given: $.paths[*][get,post,put,patch,delete]
     then:
       field: description
       function: truthy
-
   veli-operation-id-exists:
-    description: "Every operation must have an operationId"
+    description: Every operation must have an operationId
     severity: error
-    given: "$.paths[*][get,post,put,patch,delete]"
+    given: $.paths[*][get,post,put,patch,delete]
     then:
       field: operationId
       function: truthy
-
   veli-operation-id-camel-case:
-    description: "operationId should be camelCase"
+    description: operationId should be camelCase
     severity: warn
-    given: "$.paths[*][get,post,put,patch,delete].operationId"
+    given: $.paths[*][get,post,put,patch,delete].operationId
     then:
       function: pattern
       functionOptions:
-        match: "^[a-z][a-zA-Z0-9]*$"
-
-  # TAGS
+        match: ^[a-z][a-zA-Z0-9]*$
   veli-operation-tags-exist:
-    description: "Every operation should have at least one tag"
+    description: Every operation should have at least one tag
     severity: warn
-    given: "$.paths[*][get,post,put,patch,delete]"
+    given: $.paths[*][get,post,put,patch,delete]
     then:
       field: tags
       function: truthy
-
   veli-tags-defined:
-    description: "All tags used in operations should be defined at root level"
+    description: All tags used in operations should be defined at root level
     severity: warn
-    given: "$"
+    given: $
     then:
       field: tags
       function: truthy
-
-  # PARAMETERS
   veli-parameter-description-exists:
-    description: "All parameters should have a description"
+    description: All parameters should have a description
     severity: warn
-    given: "$.paths[*][get,post,put,patch,delete].parameters[*]"
+    given: $.paths[*][get,post,put,patch,delete].parameters[*]
     then:
       field: description
       function: truthy
-
   veli-parameter-schema-exists:
-    description: "All parameters must have a schema"
+    description: All parameters must have a schema
     severity: error
-    given: "$.paths[*][get,post,put,patch,delete].parameters[*]"
+    given: $.paths[*][get,post,put,patch,delete].parameters[*]
     then:
       field: schema
       function: truthy
-
-  # REQUEST BODIES
   veli-request-body-description:
-    description: "Request bodies should have a description"
+    description: Request bodies should have a description
     severity: warn
-    given: "$.paths[*][post,put,patch].requestBody"
+    given: $.paths[*][post,put,patch].requestBody
     then:
       field: description
       function: truthy
-
   veli-request-body-content:
-    description: "Request bodies must define content"
+    description: Request bodies must define content
     severity: error
-    given: "$.paths[*][post,put,patch].requestBody"
+    given: $.paths[*][post,put,patch].requestBody
     then:
       field: content
       function: truthy
-
-  # RESPONSES
   veli-responses-exist:
-    description: "Every operation must define responses"
+    description: Every operation must define responses
     severity: error
-    given: "$.paths[*][get,post,put,patch,delete]"
+    given: $.paths[*][get,post,put,patch,delete]
     then:
       field: responses
       function: truthy
-
   veli-response-success-exists:
-    description: "Every operation must have a 2xx success response"
+    description: Every operation must have a 2xx success response
     severity: error
-    given: "$.paths[*][get,post,put,patch,delete].responses"
+    given: $.paths[*][get,post,put,patch,delete].responses
     then:
       function: schema
       functionOptions:
         schema:
           type: object
           anyOf:
-            - required: ["200"]
-            - required: ["201"]
-            - required: ["204"]
-
+          - required:
+            - '200'
+          - required:
+            - '201'
+          - required:
+            - '204'
   veli-response-description-exists:
-    description: "All responses must have a description"
+    description: All responses must have a description
     severity: error
-    given: "$.paths[*][get,post,put,patch,delete].responses[*]"
+    given: $.paths[*][get,post,put,patch,delete].responses[*]
     then:
       field: description
       function: truthy
-
-  # SCHEMAS
   veli-schema-description-exists:
-    description: "All named schemas should have a description"
+    description: All named schemas should have a description
     severity: warn
-    given: "$.components.schemas[*]"
+    given: $.components.schemas[*]
     then:
       field: description
       function: truthy
-
   veli-schema-properties-described:
-    description: "Schema properties should have descriptions"
+    description: Schema properties should have descriptions
     severity: warn
-    given: "$.components.schemas[*].properties[*]"
+    given: $.components.schemas[*].properties[*]
     then:
       field: description
       function: truthy
-
-  # SECURITY
   veli-security-defined:
-    description: "API should define security schemes"
+    description: API should define security schemes
     severity: warn
-    given: "$.components"
+    given: $.components
     then:
       field: securitySchemes
       function: truthy
-
   veli-security-applied:
-    description: "API should apply security at the root level or per operation"
+    description: API should apply security at the root level or per operation
     severity: warn
-    given: "$"
+    given: $
     then:
       field: security
       function: truthy
-
   veli-bearer-auth-scheme:
-    description: "Bearer auth should use http type with bearer scheme"
+    description: Bearer auth should use http type with bearer scheme
     severity: error
-    given: "$.components.securitySchemes[?(@.type=='http')]"
+    given: $.components.securitySchemes[?(@.type=='http')]
     then:
       field: scheme
       function: pattern
       functionOptions:
-        match: "^bearer$"
-
-  # CRYPTO/FINANCE-SPECIFIC
+        match: ^bearer$
   veli-portfolio-response-schema:
-    description: "Portfolio endpoints should return schema-referenced responses"
+    description: Portfolio endpoints should return schema-referenced responses
     severity: warn
-    given: "$.paths['/portfolios'][get,post].responses[200,201].content['application/json'].schema"
+    given: $.paths['/portfolios'][get,post].responses[200,201].content['application/json'].schema
     then:
       function: truthy
-
   veli-strategy-id-parameter:
-    description: "Strategy path parameters should be named strategyId"
+    description: Strategy path parameters should be named strategyId
     severity: warn
-    given: "$.paths['/strategies/{strategyId}'][*].parameters[?(@.in=='path')]"
+    given: $.paths['/strategies/{strategyId}'][*].parameters[?(@.in=='path')]
     then:
       field: name
       function: pattern
       functionOptions:
-        match: "^strategyId$"
-
+        match: ^strategyId$
   veli-portfolio-id-parameter:
-    description: "Portfolio path parameters should be named portfolioId"
+    description: Portfolio path parameters should be named portfolioId
     severity: warn
-    given: "$.paths['/portfolios/{portfolioId}'][*].parameters[?(@.in=='path')]"
+    given: $.paths['/portfolios/{portfolioId}'][*].parameters[?(@.in=='path')]
     then:
       field: name
       function: pattern
       functionOptions:
-        match: "^portfolioId$"
-
-  # GENERAL QUALITY
+        match: ^portfolioId$
   veli-no-empty-paths:
-    description: "Paths object should not be empty"
+    description: Paths object should not be empty
     severity: error
-    given: "$.paths"
+    given: $.paths
     then:
       function: schema
       functionOptions:
         schema:
           type: object
           minProperties: 1
-
   veli-components-schemas-exist:
-    description: "API should define reusable schemas in components"
+    description: API should define reusable schemas in components
     severity: warn
-    given: "$.components"
+    given: $.components
     then:
       field: schemas
+      function: truthy
+  servers-expected-domain:
+    description: Server URLs should be on the veli.io domain.
+    severity: warn
+    given: $.servers[*].url
+    then:
+      function: pattern
+      functionOptions:
+        match: veli\.io
+  query-params-casing:
+    description: Query parameters should be snake_case (the dominant convention in this API).
+    severity: warn
+    given: $.paths[*][get,post,put,patch,delete].parameters[?(@.in=='query')]
+    then:
+      field: name
+      function: casing
+      functionOptions:
+        type: snake
+  schema-names-casing:
+    description: Component schema names should be PascalCase (the dominant convention in this API).
+    severity: warn
+    given: $.components.schemas
+    then:
+      field: '@key'
+      function: casing
+      functionOptions:
+        type: pascal
+  schema-properties-casing:
+    description: Schema properties should be camelCase (the dominant convention in this API).
+    severity: info
+    given: $.components.schemas[*].properties
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        match: ^[a-z][A-Za-z0-9]*$
+  no-empty-descriptions:
+    description: Descriptions must not be empty strings.
+    severity: warn
+    given: $..description
+    then:
       function: truthy
