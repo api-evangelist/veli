@@ -104,6 +104,8 @@ apis:
         url: examples/veli-create-portfolio-request-example.json
         title: Create Portfolio Request Example
 common:
+  - type: AgenticAccess
+    url: agentic-access/veli-agentic-access.yml
   - type: DomainSecurity
     url: security/veli-domain-security.yml
   - type: Authentication
