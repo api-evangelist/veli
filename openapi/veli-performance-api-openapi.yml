@@ -1,0 +1,110 @@
+openapi: 3.1.0
+info:
+  title: Veli Orders Performance API
+  description: The Veli API enables financial platforms and crypto exchanges to integrate automated investment strategies for their users. Partners retain custody and execution while Veli handles strategy logic, rebalancing signals, fee collection, and performance reporting for crypto portfolios.
+  version: '1.0'
+  contact:
+    name: Veli Support
+    url: https://veli.io/
+  license:
+    name: Veli Terms of Service
+    url: https://veli.io/terms
+  x-generated-from: documentation
+servers:
+- url: https://api.veli.io/v1
+  description: Veli API
+security:
+- BearerAuth: []
+tags:
+- name: Performance
+  description: Portfolio performance and returns
+paths:
+  /portfolios/{portfolioId}/performance:
+    get:
+      operationId: getPerformance
+      summary: Veli Get Performance
+      description: Returns portfolio performance metrics including total return, annualized return, Sharpe ratio, and time-series data for specified date ranges.
+      tags:
+      - Performance
+      parameters:
+      - name: portfolioId
+        in: path
+        required: true
+        description: Portfolio identifier
+        schema:
+          type: string
+        example: port-abc123
+      - name: period
+        in: query
+        description: 'Time period: 1d, 7d, 1m, 3m, 1y, all'
+        schema:
+          type: string
+          enum:
+          - 1d
+          - 7d
+          - 1m
+          - 3m
+          - 1y
+          - all
+          default: 1m
+      responses:
+        '200':
+          description: Portfolio performance metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PerformanceResponse'
+              examples:
+                GetPerformance200Example:
+                  summary: Default getPerformance 200 response
+                  x-microcks-default: true
+                  value:
+                    portfolioId: port-abc123
+                    period: 1m
+                    totalReturn: 0.08
+                    annualizedReturn: 0.96
+                    sharpeRatio: 1.8
+                    startValue: 4861.81
+                    endValue: 5250.75
+        '404':
+          description: Portfolio not found
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  schemas:
+    PerformanceResponse:
+      type: object
+      description: Portfolio performance metrics
+      properties:
+        portfolioId:
+          type: string
+        period:
+          type: string
+          example: 1m
+        totalReturn:
+          type: number
+          description: Total return for period (e.g. 0.08 = 8%)
+          example: 0.08
+        annualizedReturn:
+          type: number
+          description: Annualized return
+          example: 0.96
+        sharpeRatio:
+          type: number
+          description: Sharpe ratio
+          example: 1.8
+        startValue:
+          type: number
+          description: Portfolio value at start of period
+          example: 4861.81
+        endValue:
+          type: number
+          description: Portfolio value at end of period
+          example: 5250.75
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Bearer token for API authentication

@@ -1,0 +1,118 @@
+openapi: 3.1.0
+info:
+  title: Veli Orders Positions API
+  description: The Veli API enables financial platforms and crypto exchanges to integrate automated investment strategies for their users. Partners retain custody and execution while Veli handles strategy logic, rebalancing signals, fee collection, and performance reporting for crypto portfolios.
+  version: '1.0'
+  contact:
+    name: Veli Support
+    url: https://veli.io/
+  license:
+    name: Veli Terms of Service
+    url: https://veli.io/terms
+  x-generated-from: documentation
+servers:
+- url: https://api.veli.io/v1
+  description: Veli API
+security:
+- BearerAuth: []
+tags:
+- name: Positions
+  description: Portfolio holdings and allocations
+paths:
+  /portfolios/{portfolioId}/positions:
+    get:
+      operationId: getPositions
+      summary: Veli Get Positions
+      description: Returns current asset positions in a portfolio including quantity, average cost, current value, unrealized P&L, and percentage allocation.
+      tags:
+      - Positions
+      parameters:
+      - name: portfolioId
+        in: path
+        required: true
+        description: Portfolio identifier
+        schema:
+          type: string
+        example: port-abc123
+      responses:
+        '200':
+          description: Current portfolio positions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PositionListResponse'
+              examples:
+                GetPositions200Example:
+                  summary: Default getPositions 200 response
+                  x-microcks-default: true
+                  value:
+                    portfolioId: port-abc123
+                    positions:
+                    - symbol: BTC
+                      quantity: 0.045
+                      averageCost: 42000.0
+                      currentPrice: 68000.0
+                      currentValue: 3060.0
+                      unrealizedPnL: 1170.0
+                      allocationPct: 0.583
+                    - symbol: ETH
+                      quantity: 1.15
+                      averageCost: 1800.0
+                      currentPrice: 1900.0
+                      currentValue: 2185.0
+                      unrealizedPnL: 115.0
+                      allocationPct: 0.416
+        '404':
+          description: Portfolio not found
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  schemas:
+    PositionListResponse:
+      type: object
+      properties:
+        portfolioId:
+          type: string
+        positions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Position'
+    Position:
+      type: object
+      description: Current asset position in a portfolio
+      properties:
+        symbol:
+          type: string
+          description: Crypto asset symbol
+          example: BTC
+        quantity:
+          type: number
+          description: Number of units held
+          example: 0.045
+        averageCost:
+          type: number
+          description: Average cost per unit in base currency
+          example: 42000.0
+        currentPrice:
+          type: number
+          description: Current market price per unit
+          example: 68000.0
+        currentValue:
+          type: number
+          description: Current total position value
+          example: 3060.0
+        unrealizedPnL:
+          type: number
+          description: Unrealized profit/loss
+          example: 1170.0
+        allocationPct:
+          type: number
+          description: Actual allocation percentage
+          example: 0.583
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Bearer token for API authentication

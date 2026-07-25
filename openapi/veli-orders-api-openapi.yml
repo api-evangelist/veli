@@ -1,0 +1,102 @@
+openapi: 3.1.0
+info:
+  title: Veli Orders API
+  description: The Veli API enables financial platforms and crypto exchanges to integrate automated investment strategies for their users. Partners retain custody and execution while Veli handles strategy logic, rebalancing signals, fee collection, and performance reporting for crypto portfolios.
+  version: '1.0'
+  contact:
+    name: Veli Support
+    url: https://veli.io/
+  license:
+    name: Veli Terms of Service
+    url: https://veli.io/terms
+  x-generated-from: documentation
+servers:
+- url: https://api.veli.io/v1
+  description: Veli API
+security:
+- BearerAuth: []
+tags:
+- name: Orders
+  description: Buy/sell order execution signals
+paths:
+  /portfolios/{portfolioId}/rebalance:
+    post:
+      operationId: rebalancePortfolio
+      summary: Veli Rebalance Portfolio
+      description: Triggers a manual rebalance of the portfolio to restore target allocations. Returns buy and sell orders to execute to achieve the target allocation.
+      tags:
+      - Orders
+      parameters:
+      - name: portfolioId
+        in: path
+        required: true
+        description: Portfolio identifier
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Rebalancing orders generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RebalanceResponse'
+              examples:
+                RebalancePortfolio200Example:
+                  summary: Default rebalancePortfolio 200 response
+                  x-microcks-default: true
+                  value:
+                    portfolioId: port-abc123
+                    orders:
+                    - side: sell
+                      symbol: BTC
+                      quantity: 0.005
+                      estimatedValue: 340.0
+                    - side: buy
+                      symbol: ETH
+                      quantity: 0.18
+                      estimatedValue: 342.0
+        '404':
+          description: Portfolio not found
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  schemas:
+    Order:
+      type: object
+      description: Buy or sell order signal from Veli strategy engine
+      properties:
+        side:
+          type: string
+          enum:
+          - buy
+          - sell
+          description: Order side
+          example: sell
+        symbol:
+          type: string
+          description: Asset to trade
+          example: BTC
+        quantity:
+          type: number
+          description: Quantity to trade
+          example: 0.005
+        estimatedValue:
+          type: number
+          description: Estimated order value in base currency
+          example: 340.0
+    RebalanceResponse:
+      type: object
+      properties:
+        portfolioId:
+          type: string
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Bearer token for API authentication

@@ -1,0 +1,224 @@
+openapi: 3.1.0
+info:
+  title: Veli Orders Strategies API
+  description: The Veli API enables financial platforms and crypto exchanges to integrate automated investment strategies for their users. Partners retain custody and execution while Veli handles strategy logic, rebalancing signals, fee collection, and performance reporting for crypto portfolios.
+  version: '1.0'
+  contact:
+    name: Veli Support
+    url: https://veli.io/
+  license:
+    name: Veli Terms of Service
+    url: https://veli.io/terms
+  x-generated-from: documentation
+servers:
+- url: https://api.veli.io/v1
+  description: Veli API
+security:
+- BearerAuth: []
+tags:
+- name: Strategies
+  description: Investment strategy catalog and configuration
+paths:
+  /strategies:
+    get:
+      operationId: listStrategies
+      summary: Veli List Strategies
+      description: Returns all available investment strategies including index funds, theme portfolios, and custom strategies. Each strategy includes allocation weights, rebalancing rules, and performance history.
+      tags:
+      - Strategies
+      parameters:
+      - name: category
+        in: query
+        description: 'Filter by strategy category: index, theme, or custom'
+        schema:
+          type: string
+          enum:
+          - index
+          - theme
+          - custom
+      - name: risk
+        in: query
+        description: 'Filter by risk level: conservative, moderate, aggressive'
+        schema:
+          type: string
+          enum:
+          - conservative
+          - moderate
+          - aggressive
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 20
+          maximum: 100
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          default: 0
+      responses:
+        '200':
+          description: List of investment strategies
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StrategyListResponse'
+              examples:
+                ListStrategies200Example:
+                  summary: Default listStrategies 200 response
+                  x-microcks-default: true
+                  value:
+                    strategies:
+                    - id: strat-btc-eth-index
+                      name: BTC-ETH Index
+                      description: Market-cap weighted index of Bitcoin and Ethereum
+                      category: index
+                      risk: moderate
+                      assets:
+                      - symbol: BTC
+                        weight: 0.6
+                      - symbol: ETH
+                        weight: 0.4
+                      rebalanceThreshold: 0.05
+                      performanceYTD: 0.23
+                    total: 1
+        '401':
+          description: Unauthorized
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /strategies/{strategyId}:
+    get:
+      operationId: getStrategy
+      summary: Veli Get Strategy
+      description: Returns complete details for a specific investment strategy including asset allocation, rebalancing rules, fee structure, and performance metrics.
+      tags:
+      - Strategies
+      parameters:
+      - name: strategyId
+        in: path
+        required: true
+        description: Strategy identifier
+        schema:
+          type: string
+        example: strat-btc-eth-index
+      responses:
+        '200':
+          description: Strategy details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Strategy'
+              examples:
+                GetStrategy200Example:
+                  summary: Default getStrategy 200 response
+                  x-microcks-default: true
+                  value:
+                    id: strat-btc-eth-index
+                    name: BTC-ETH Index
+                    description: Market-cap weighted index of Bitcoin and Ethereum
+                    category: index
+                    risk: moderate
+                    assets:
+                    - symbol: BTC
+                      weight: 0.6
+                      name: Bitcoin
+                    - symbol: ETH
+                      weight: 0.4
+                      name: Ethereum
+                    rebalanceThreshold: 0.05
+                    managementFee: 0.01
+                    performanceYTD: 0.23
+                    performanceAllTime: 1.45
+        '404':
+          description: Strategy not found
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  schemas:
+    Strategy:
+      type: object
+      description: Investment strategy definition with allocations and rules
+      properties:
+        id:
+          type: string
+          description: Strategy identifier
+          example: strat-btc-eth-index
+        name:
+          type: string
+          description: Strategy display name
+          example: BTC-ETH Index
+        description:
+          type: string
+          description: Strategy description
+        category:
+          type: string
+          enum:
+          - index
+          - theme
+          - custom
+          description: Strategy category
+          example: index
+        risk:
+          type: string
+          enum:
+          - conservative
+          - moderate
+          - aggressive
+          description: Risk level
+          example: moderate
+        assets:
+          type: array
+          description: Asset allocations
+          items:
+            $ref: '#/components/schemas/AssetAllocation'
+        rebalanceThreshold:
+          type: number
+          description: Drift threshold that triggers rebalancing (e.g. 0.05 = 5%)
+          example: 0.05
+        managementFee:
+          type: number
+          description: Annual management fee rate (e.g. 0.01 = 1%)
+          example: 0.01
+        performanceYTD:
+          type: number
+          description: Year-to-date return
+          example: 0.23
+        performanceAllTime:
+          type: number
+          description: All-time return
+          example: 1.45
+    AssetAllocation:
+      type: object
+      description: Asset allocation within a strategy
+      properties:
+        symbol:
+          type: string
+          description: Crypto asset symbol
+          example: BTC
+        name:
+          type: string
+          description: Asset name
+          example: Bitcoin
+        weight:
+          type: number
+          description: Target allocation weight (0-1)
+          minimum: 0
+          maximum: 1
+          example: 0.6
+    StrategyListResponse:
+      type: object
+      properties:
+        strategies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Strategy'
+        total:
+          type: integer
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Bearer token for API authentication
