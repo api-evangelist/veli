@@ -5,9 +5,22 @@ description: >-
   handling running investment strategies, buying, selling, rebalancing, and fee collection behind the scenes. Partners
   retain custody and execution while Veli manages the strategy logic.
 type: Index
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
 position: Consumer
 access: 3rd-Party
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/veli.png
 tags:
   - Crypto
   - DeFi
@@ -19,90 +32,281 @@ created: '2026-03-16'
 modified: '2026-05-19'
 specificationVersion: '0.19'
 apis:
-  - aid: veli:veli
-    name: Veli API
-    description: >-
-      The Veli API enables financial platforms and crypto exchanges to integrate automated investment strategies for
-      their users. Partners keep custody and execution while Veli handles the strategy engine: portfolio creation,
-      automated rebalancing, buy/sell execution signals, fee collection, and performance reporting. Supports
-      index-based, theme-based, and custom strategy portfolios.
-    humanURL: https://veli.io/
-    tags:
-      - Crypto
-      - DeFi
-      - Finance
-      - Investment
-      - Portfolio Management
-    properties:
-      - type: Documentation
-        url: https://veli.io/
-      - type: Portal
-        url: https://veli.io/
-      - type: OpenAPI
-        url: openapi/veli-openapi.yml
-      - type: JSONSchema
-        url: json-schema/veli-portfolio-schema.json
-        title: Portfolio Schema
-      - type: JSONSchema
-        url: json-schema/veli-strategy-schema.json
-        title: Strategy Schema
-      - type: JSONSchema
-        url: json-schema/veli-position-schema.json
-        title: Position Schema
-      - type: JSONSchema
-        url: json-schema/veli-order-schema.json
-        title: Order Schema
-      - type: JSONSchema
-        url: json-schema/veli-asset-allocation-schema.json
-        title: Asset Allocation Schema
-      - type: JSONSchema
-        url: json-schema/veli-performance-response-schema.json
-        title: Performance Response Schema
-      - type: JSONSchema
-        url: json-schema/veli-create-portfolio-request-schema.json
-        title: Create Portfolio Request Schema
-      - type: JSONStructure
-        url: json-structure/veli-portfolio-structure.json
-        title: Portfolio Structure
-      - type: JSONStructure
-        url: json-structure/veli-strategy-structure.json
-        title: Strategy Structure
-      - type: JSONStructure
-        url: json-structure/veli-position-structure.json
-        title: Position Structure
-      - type: JSONStructure
-        url: json-structure/veli-order-structure.json
-        title: Order Structure
-      - type: JSONStructure
-        url: json-structure/veli-asset-allocation-structure.json
-        title: Asset Allocation Structure
-      - type: JSONStructure
-        url: json-structure/veli-performance-response-structure.json
-        title: Performance Response Structure
-      - type: JSONStructure
-        url: json-structure/veli-create-portfolio-request-structure.json
-        title: Create Portfolio Request Structure
-      - type: Examples
-        url: examples/veli-portfolio-example.json
-        title: Portfolio Example
-      - type: Examples
-        url: examples/veli-strategy-example.json
-        title: Strategy Example
-      - type: Examples
-        url: examples/veli-position-example.json
-        title: Position Example
-      - type: Examples
-        url: examples/veli-order-example.json
-        title: Order Example
-      - type: Examples
-        url: examples/veli-asset-allocation-example.json
-        title: Asset Allocation Example
-      - type: Examples
-        url: examples/veli-performance-response-example.json
-        title: Performance Response Example
-      - type: Examples
-        url: examples/veli-create-portfolio-request-example.json
-        title: Create Portfolio Request Example
+- aid: veli:veli-orders-api
+  name: Veli Orders API
+  description: Buy/sell order execution signals
+  humanURL: https://veli.io/
+  tags:
+  - Orders
+  properties:
+  - type: OpenAPI
+    url: openapi/veli-orders-api-openapi.yml
+  - type: Documentation
+    url: https://veli.io/
+  - type: Portal
+    url: https://veli.io/
+  - type: JSONSchema
+    url: json-schema/veli-portfolio-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-strategy-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-position-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-order-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-asset-allocation-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-performance-response-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-create-portfolio-request-schema.json
+  - type: JSONStructure
+    url: json-structure/veli-portfolio-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-strategy-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-position-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-order-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-asset-allocation-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-performance-response-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-create-portfolio-request-structure.json
+  - type: Examples
+    url: examples/veli-portfolio-example.json
+  - type: Examples
+    url: examples/veli-strategy-example.json
+  - type: Examples
+    url: examples/veli-position-example.json
+  - type: Examples
+    url: examples/veli-order-example.json
+  - type: Examples
+    url: examples/veli-asset-allocation-example.json
+  - type: Examples
+    url: examples/veli-performance-response-example.json
+  - type: Examples
+    url: examples/veli-create-portfolio-request-example.json
+- aid: veli:veli-performance-api
+  name: Veli Performance API
+  description: Portfolio performance and returns
+  humanURL: https://veli.io/
+  tags:
+  - Performance
+  properties:
+  - type: OpenAPI
+    url: openapi/veli-performance-api-openapi.yml
+  - type: Documentation
+    url: https://veli.io/
+  - type: Portal
+    url: https://veli.io/
+  - type: JSONSchema
+    url: json-schema/veli-portfolio-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-strategy-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-position-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-order-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-asset-allocation-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-performance-response-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-create-portfolio-request-schema.json
+  - type: JSONStructure
+    url: json-structure/veli-portfolio-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-strategy-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-position-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-order-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-asset-allocation-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-performance-response-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-create-portfolio-request-structure.json
+  - type: Examples
+    url: examples/veli-portfolio-example.json
+  - type: Examples
+    url: examples/veli-strategy-example.json
+  - type: Examples
+    url: examples/veli-position-example.json
+  - type: Examples
+    url: examples/veli-order-example.json
+  - type: Examples
+    url: examples/veli-asset-allocation-example.json
+  - type: Examples
+    url: examples/veli-performance-response-example.json
+  - type: Examples
+    url: examples/veli-create-portfolio-request-example.json
+- aid: veli:veli-portfolios-api
+  name: Veli Portfolios API
+  description: User portfolio creation and management
+  humanURL: https://veli.io/
+  tags:
+  - Portfolios
+  properties:
+  - type: OpenAPI
+    url: openapi/veli-portfolios-api-openapi.yml
+  - type: Documentation
+    url: https://veli.io/
+  - type: Portal
+    url: https://veli.io/
+  - type: JSONSchema
+    url: json-schema/veli-portfolio-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-strategy-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-position-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-order-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-asset-allocation-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-performance-response-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-create-portfolio-request-schema.json
+  - type: JSONStructure
+    url: json-structure/veli-portfolio-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-strategy-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-position-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-order-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-asset-allocation-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-performance-response-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-create-portfolio-request-structure.json
+  - type: Examples
+    url: examples/veli-portfolio-example.json
+  - type: Examples
+    url: examples/veli-strategy-example.json
+  - type: Examples
+    url: examples/veli-position-example.json
+  - type: Examples
+    url: examples/veli-order-example.json
+  - type: Examples
+    url: examples/veli-asset-allocation-example.json
+  - type: Examples
+    url: examples/veli-performance-response-example.json
+  - type: Examples
+    url: examples/veli-create-portfolio-request-example.json
+- aid: veli:veli-positions-api
+  name: Veli Positions API
+  description: Portfolio holdings and allocations
+  humanURL: https://veli.io/
+  tags:
+  - Positions
+  properties:
+  - type: OpenAPI
+    url: openapi/veli-positions-api-openapi.yml
+  - type: Documentation
+    url: https://veli.io/
+  - type: Portal
+    url: https://veli.io/
+  - type: JSONSchema
+    url: json-schema/veli-portfolio-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-strategy-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-position-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-order-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-asset-allocation-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-performance-response-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-create-portfolio-request-schema.json
+  - type: JSONStructure
+    url: json-structure/veli-portfolio-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-strategy-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-position-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-order-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-asset-allocation-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-performance-response-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-create-portfolio-request-structure.json
+  - type: Examples
+    url: examples/veli-portfolio-example.json
+  - type: Examples
+    url: examples/veli-strategy-example.json
+  - type: Examples
+    url: examples/veli-position-example.json
+  - type: Examples
+    url: examples/veli-order-example.json
+  - type: Examples
+    url: examples/veli-asset-allocation-example.json
+  - type: Examples
+    url: examples/veli-performance-response-example.json
+  - type: Examples
+    url: examples/veli-create-portfolio-request-example.json
+- aid: veli:veli-strategies-api
+  name: Veli Strategies API
+  description: Investment strategy catalog and configuration
+  humanURL: https://veli.io/
+  tags:
+  - Strategies
+  properties:
+  - type: OpenAPI
+    url: openapi/veli-strategies-api-openapi.yml
+  - type: Documentation
+    url: https://veli.io/
+  - type: Portal
+    url: https://veli.io/
+  - type: JSONSchema
+    url: json-schema/veli-portfolio-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-strategy-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-position-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-order-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-asset-allocation-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-performance-response-schema.json
+  - type: JSONSchema
+    url: json-schema/veli-create-portfolio-request-schema.json
+  - type: JSONStructure
+    url: json-structure/veli-portfolio-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-strategy-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-position-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-order-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-asset-allocation-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-performance-response-structure.json
+  - type: JSONStructure
+    url: json-structure/veli-create-portfolio-request-structure.json
+  - type: Examples
+    url: examples/veli-portfolio-example.json
+  - type: Examples
+    url: examples/veli-strategy-example.json
+  - type: Examples
+    url: examples/veli-position-example.json
+  - type: Examples
+    url: examples/veli-order-example.json
+  - type: Examples
+    url: examples/veli-asset-allocation-example.json
+  - type: Examples
+    url: examples/veli-performance-response-example.json
+  - type: Examples
+    url: examples/veli-create-portfolio-request-example.json
 common:
   - type: AgenticAccess
     url: agentic-access/veli-agentic-access.yml
