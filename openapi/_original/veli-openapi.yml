@@ -1,0 +1,756 @@
+openapi: 3.1.0
+info:
+  title: Veli API
+  description: >-
+    The Veli API enables financial platforms and crypto exchanges to integrate
+    automated investment strategies for their users. Partners retain custody and
+    execution while Veli handles strategy logic, rebalancing signals, fee collection,
+    and performance reporting for crypto portfolios.
+  version: "1.0"
+  contact:
+    name: Veli Support
+    url: https://veli.io/
+  license:
+    name: Veli Terms of Service
+    url: https://veli.io/terms
+  x-generated-from: documentation
+
+servers:
+  - url: https://api.veli.io/v1
+    description: Veli API
+
+security:
+  - BearerAuth: []
+
+tags:
+  - name: Strategies
+    description: Investment strategy catalog and configuration
+  - name: Portfolios
+    description: User portfolio creation and management
+  - name: Positions
+    description: Portfolio holdings and allocations
+  - name: Orders
+    description: Buy/sell order execution signals
+  - name: Performance
+    description: Portfolio performance and returns
+  - name: Fees
+    description: Fee management and collection
+
+paths:
+  /strategies:
+    get:
+      operationId: listStrategies
+      summary: Veli List Strategies
+      description: >-
+        Returns all available investment strategies including index funds, theme
+        portfolios, and custom strategies. Each strategy includes allocation
+        weights, rebalancing rules, and performance history.
+      tags:
+        - Strategies
+      parameters:
+        - name: category
+          in: query
+          description: "Filter by strategy category: index, theme, or custom"
+          schema:
+            type: string
+            enum: [index, theme, custom]
+        - name: risk
+          in: query
+          description: "Filter by risk level: conservative, moderate, aggressive"
+          schema:
+            type: string
+            enum: [conservative, moderate, aggressive]
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: List of investment strategies
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StrategyListResponse'
+              examples:
+                ListStrategies200Example:
+                  summary: Default listStrategies 200 response
+                  x-microcks-default: true
+                  value:
+                    strategies:
+                      - id: strat-btc-eth-index
+                        name: BTC-ETH Index
+                        description: Market-cap weighted index of Bitcoin and Ethereum
+                        category: index
+                        risk: moderate
+                        assets:
+                          - symbol: BTC
+                            weight: 0.6
+                          - symbol: ETH
+                            weight: 0.4
+                        rebalanceThreshold: 0.05
+                        performanceYTD: 0.23
+                    total: 1
+        '401':
+          description: Unauthorized
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+
+  /strategies/{strategyId}:
+    get:
+      operationId: getStrategy
+      summary: Veli Get Strategy
+      description: >-
+        Returns complete details for a specific investment strategy including
+        asset allocation, rebalancing rules, fee structure, and performance metrics.
+      tags:
+        - Strategies
+      parameters:
+        - name: strategyId
+          in: path
+          required: true
+          description: "Strategy identifier"
+          schema:
+            type: string
+          example: strat-btc-eth-index
+      responses:
+        '200':
+          description: Strategy details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Strategy'
+              examples:
+                GetStrategy200Example:
+                  summary: Default getStrategy 200 response
+                  x-microcks-default: true
+                  value:
+                    id: strat-btc-eth-index
+                    name: BTC-ETH Index
+                    description: Market-cap weighted index of Bitcoin and Ethereum
+                    category: index
+                    risk: moderate
+                    assets:
+                      - symbol: BTC
+                        weight: 0.6
+                        name: Bitcoin
+                      - symbol: ETH
+                        weight: 0.4
+                        name: Ethereum
+                    rebalanceThreshold: 0.05
+                    managementFee: 0.01
+                    performanceYTD: 0.23
+                    performanceAllTime: 1.45
+        '404':
+          description: Strategy not found
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+
+  /portfolios:
+    get:
+      operationId: listPortfolios
+      summary: Veli List Portfolios
+      description: >-
+        Returns all portfolios for the authenticated partner, with portfolio
+        values, strategy, and performance summary for each.
+      tags:
+        - Portfolios
+      parameters:
+        - name: userId
+          in: query
+          description: "Filter portfolios by end-user ID"
+          schema:
+            type: string
+        - name: strategyId
+          in: query
+          description: "Filter portfolios by strategy"
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: List of portfolios
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PortfolioListResponse'
+              examples:
+                ListPortfolios200Example:
+                  summary: Default listPortfolios 200 response
+                  x-microcks-default: true
+                  value:
+                    portfolios:
+                      - id: port-abc123
+                        userId: user-xyz789
+                        strategyId: strat-btc-eth-index
+                        status: active
+                        totalValue: 5250.75
+                        currency: USD
+                        createdAt: "2025-01-15T09:00:00Z"
+                    total: 1
+        '401':
+          description: Unauthorized
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+
+    post:
+      operationId: createPortfolio
+      summary: Veli Create Portfolio
+      description: >-
+        Creates a new investment portfolio for an end-user, assigning it to a
+        strategy and setting an initial investment amount. Returns the portfolio
+        ID and initial buy orders to execute.
+      tags:
+        - Portfolios
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePortfolioRequest'
+            examples:
+              CreatePortfolioRequestExample:
+                summary: Default createPortfolio request
+                x-microcks-default: true
+                value:
+                  userId: user-xyz789
+                  strategyId: strat-btc-eth-index
+                  initialAmount: 1000.00
+                  currency: USD
+      responses:
+        '201':
+          description: Portfolio created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolio'
+              examples:
+                CreatePortfolio201Example:
+                  summary: Default createPortfolio 201 response
+                  x-microcks-default: true
+                  value:
+                    id: port-abc123
+                    userId: user-xyz789
+                    strategyId: strat-btc-eth-index
+                    status: active
+                    totalValue: 1000.00
+                    currency: USD
+                    createdAt: "2026-05-03T10:00:00Z"
+        '400':
+          description: Invalid request
+        '401':
+          description: Unauthorized
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+
+  /portfolios/{portfolioId}:
+    get:
+      operationId: getPortfolio
+      summary: Veli Get Portfolio
+      description: >-
+        Returns complete portfolio details including current value, asset
+        allocations, positions, performance metrics, and transaction history.
+      tags:
+        - Portfolios
+      parameters:
+        - name: portfolioId
+          in: path
+          required: true
+          description: "Portfolio identifier"
+          schema:
+            type: string
+          example: port-abc123
+      responses:
+        '200':
+          description: Portfolio details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolio'
+              examples:
+                GetPortfolio200Example:
+                  summary: Default getPortfolio 200 response
+                  x-microcks-default: true
+                  value:
+                    id: port-abc123
+                    userId: user-xyz789
+                    strategyId: strat-btc-eth-index
+                    status: active
+                    totalValue: 5250.75
+                    currency: USD
+                    createdAt: "2025-01-15T09:00:00Z"
+                    updatedAt: "2026-05-03T08:00:00Z"
+        '404':
+          description: Portfolio not found
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+
+    delete:
+      operationId: closePortfolio
+      summary: Veli Close Portfolio
+      description: >-
+        Closes a portfolio and liquidates all positions. Returns sell orders
+        to execute to return funds to the user.
+      tags:
+        - Portfolios
+      parameters:
+        - name: portfolioId
+          in: path
+          required: true
+          description: "Portfolio identifier"
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Portfolio closed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClosePortfolioResponse'
+        '404':
+          description: Portfolio not found
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+
+  /portfolios/{portfolioId}/positions:
+    get:
+      operationId: getPositions
+      summary: Veli Get Positions
+      description: >-
+        Returns current asset positions in a portfolio including quantity, average
+        cost, current value, unrealized P&L, and percentage allocation.
+      tags:
+        - Positions
+      parameters:
+        - name: portfolioId
+          in: path
+          required: true
+          description: "Portfolio identifier"
+          schema:
+            type: string
+          example: port-abc123
+      responses:
+        '200':
+          description: Current portfolio positions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PositionListResponse'
+              examples:
+                GetPositions200Example:
+                  summary: Default getPositions 200 response
+                  x-microcks-default: true
+                  value:
+                    portfolioId: port-abc123
+                    positions:
+                      - symbol: BTC
+                        quantity: 0.045
+                        averageCost: 42000.00
+                        currentPrice: 68000.00
+                        currentValue: 3060.00
+                        unrealizedPnL: 1170.00
+                        allocationPct: 0.583
+                      - symbol: ETH
+                        quantity: 1.15
+                        averageCost: 1800.00
+                        currentPrice: 1900.00
+                        currentValue: 2185.00
+                        unrealizedPnL: 115.00
+                        allocationPct: 0.416
+        '404':
+          description: Portfolio not found
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+
+  /portfolios/{portfolioId}/rebalance:
+    post:
+      operationId: rebalancePortfolio
+      summary: Veli Rebalance Portfolio
+      description: >-
+        Triggers a manual rebalance of the portfolio to restore target allocations.
+        Returns buy and sell orders to execute to achieve the target allocation.
+      tags:
+        - Orders
+        - Portfolios
+      parameters:
+        - name: portfolioId
+          in: path
+          required: true
+          description: "Portfolio identifier"
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Rebalancing orders generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RebalanceResponse'
+              examples:
+                RebalancePortfolio200Example:
+                  summary: Default rebalancePortfolio 200 response
+                  x-microcks-default: true
+                  value:
+                    portfolioId: port-abc123
+                    orders:
+                      - side: sell
+                        symbol: BTC
+                        quantity: 0.005
+                        estimatedValue: 340.00
+                      - side: buy
+                        symbol: ETH
+                        quantity: 0.18
+                        estimatedValue: 342.00
+        '404':
+          description: Portfolio not found
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+
+  /portfolios/{portfolioId}/performance:
+    get:
+      operationId: getPerformance
+      summary: Veli Get Performance
+      description: >-
+        Returns portfolio performance metrics including total return, annualized
+        return, Sharpe ratio, and time-series data for specified date ranges.
+      tags:
+        - Performance
+      parameters:
+        - name: portfolioId
+          in: path
+          required: true
+          description: "Portfolio identifier"
+          schema:
+            type: string
+          example: port-abc123
+        - name: period
+          in: query
+          description: "Time period: 1d, 7d, 1m, 3m, 1y, all"
+          schema:
+            type: string
+            enum: [1d, 7d, 1m, 3m, 1y, all]
+            default: 1m
+      responses:
+        '200':
+          description: Portfolio performance metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PerformanceResponse'
+              examples:
+                GetPerformance200Example:
+                  summary: Default getPerformance 200 response
+                  x-microcks-default: true
+                  value:
+                    portfolioId: port-abc123
+                    period: 1m
+                    totalReturn: 0.08
+                    annualizedReturn: 0.96
+                    sharpeRatio: 1.8
+                    startValue: 4861.81
+                    endValue: 5250.75
+        '404':
+          description: Portfolio not found
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: "JWT Bearer token for API authentication"
+
+  schemas:
+    AssetAllocation:
+      type: object
+      description: "Asset allocation within a strategy"
+      properties:
+        symbol:
+          type: string
+          description: "Crypto asset symbol"
+          example: BTC
+        name:
+          type: string
+          description: "Asset name"
+          example: Bitcoin
+        weight:
+          type: number
+          description: "Target allocation weight (0-1)"
+          minimum: 0
+          maximum: 1
+          example: 0.6
+
+    Strategy:
+      type: object
+      description: "Investment strategy definition with allocations and rules"
+      properties:
+        id:
+          type: string
+          description: "Strategy identifier"
+          example: strat-btc-eth-index
+        name:
+          type: string
+          description: "Strategy display name"
+          example: BTC-ETH Index
+        description:
+          type: string
+          description: "Strategy description"
+        category:
+          type: string
+          enum: [index, theme, custom]
+          description: "Strategy category"
+          example: index
+        risk:
+          type: string
+          enum: [conservative, moderate, aggressive]
+          description: "Risk level"
+          example: moderate
+        assets:
+          type: array
+          description: "Asset allocations"
+          items:
+            $ref: '#/components/schemas/AssetAllocation'
+        rebalanceThreshold:
+          type: number
+          description: "Drift threshold that triggers rebalancing (e.g. 0.05 = 5%)"
+          example: 0.05
+        managementFee:
+          type: number
+          description: "Annual management fee rate (e.g. 0.01 = 1%)"
+          example: 0.01
+        performanceYTD:
+          type: number
+          description: "Year-to-date return"
+          example: 0.23
+        performanceAllTime:
+          type: number
+          description: "All-time return"
+          example: 1.45
+
+    Portfolio:
+      type: object
+      description: "User investment portfolio"
+      properties:
+        id:
+          type: string
+          description: "Portfolio identifier"
+          example: port-abc123
+        userId:
+          type: string
+          description: "End-user identifier from partner platform"
+          example: user-xyz789
+        strategyId:
+          type: string
+          description: "Assigned investment strategy"
+          example: strat-btc-eth-index
+        status:
+          type: string
+          enum: [active, paused, closed]
+          description: "Portfolio status"
+          example: active
+        totalValue:
+          type: number
+          description: "Current total portfolio value"
+          example: 5250.75
+        currency:
+          type: string
+          description: "Base currency for valuation"
+          example: USD
+        createdAt:
+          type: string
+          format: date-time
+          description: "Portfolio creation timestamp"
+        updatedAt:
+          type: string
+          format: date-time
+          description: "Last update timestamp"
+
+    CreatePortfolioRequest:
+      type: object
+      description: "Request body to create a new portfolio"
+      required:
+        - userId
+        - strategyId
+        - initialAmount
+        - currency
+      properties:
+        userId:
+          type: string
+          description: "End-user identifier"
+          example: user-xyz789
+        strategyId:
+          type: string
+          description: "Strategy to assign to portfolio"
+          example: strat-btc-eth-index
+        initialAmount:
+          type: number
+          description: "Initial investment amount"
+          example: 1000.00
+        currency:
+          type: string
+          description: "Currency of the initial investment"
+          example: USD
+
+    Position:
+      type: object
+      description: "Current asset position in a portfolio"
+      properties:
+        symbol:
+          type: string
+          description: "Crypto asset symbol"
+          example: BTC
+        quantity:
+          type: number
+          description: "Number of units held"
+          example: 0.045
+        averageCost:
+          type: number
+          description: "Average cost per unit in base currency"
+          example: 42000.00
+        currentPrice:
+          type: number
+          description: "Current market price per unit"
+          example: 68000.00
+        currentValue:
+          type: number
+          description: "Current total position value"
+          example: 3060.00
+        unrealizedPnL:
+          type: number
+          description: "Unrealized profit/loss"
+          example: 1170.00
+        allocationPct:
+          type: number
+          description: "Actual allocation percentage"
+          example: 0.583
+
+    Order:
+      type: object
+      description: "Buy or sell order signal from Veli strategy engine"
+      properties:
+        side:
+          type: string
+          enum: [buy, sell]
+          description: "Order side"
+          example: sell
+        symbol:
+          type: string
+          description: "Asset to trade"
+          example: BTC
+        quantity:
+          type: number
+          description: "Quantity to trade"
+          example: 0.005
+        estimatedValue:
+          type: number
+          description: "Estimated order value in base currency"
+          example: 340.00
+
+    StrategyListResponse:
+      type: object
+      properties:
+        strategies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Strategy'
+        total:
+          type: integer
+
+    PortfolioListResponse:
+      type: object
+      properties:
+        portfolios:
+          type: array
+          items:
+            $ref: '#/components/schemas/Portfolio'
+        total:
+          type: integer
+
+    PositionListResponse:
+      type: object
+      properties:
+        portfolioId:
+          type: string
+        positions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Position'
+
+    RebalanceResponse:
+      type: object
+      properties:
+        portfolioId:
+          type: string
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+
+    PerformanceResponse:
+      type: object
+      description: "Portfolio performance metrics"
+      properties:
+        portfolioId:
+          type: string
+        period:
+          type: string
+          example: 1m
+        totalReturn:
+          type: number
+          description: "Total return for period (e.g. 0.08 = 8%)"
+          example: 0.08
+        annualizedReturn:
+          type: number
+          description: "Annualized return"
+          example: 0.96
+        sharpeRatio:
+          type: number
+          description: "Sharpe ratio"
+          example: 1.8
+        startValue:
+          type: number
+          description: "Portfolio value at start of period"
+          example: 4861.81
+        endValue:
+          type: number
+          description: "Portfolio value at end of period"
+          example: 5250.75
+
+    ClosePortfolioResponse:
+      type: object
+      properties:
+        portfolioId:
+          type: string
+        status:
+          type: string
+          example: closed
+        liquidationOrders:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'

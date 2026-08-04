@@ -1,0 +1,22 @@
+{
+  "provider": "veli",
+  "sources": [
+    "veli-orders-api-openapi.yml",
+    "veli-performance-api-openapi.yml",
+    "veli-portfolios-api-openapi.yml",
+    "veli-positions-api-openapi.yml",
+    "veli-strategies-api-openapi.yml"
+  ],
+  "outputs": [
+    "veli-orders-api-openapi.yml",
+    "veli-performance-api-openapi.yml",
+    "veli-portfolios-api-openapi.yml",
+    "veli-positions-api-openapi.yml",
+    "veli-strategies-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
