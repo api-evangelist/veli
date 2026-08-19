@@ -1,0 +1,188 @@
+{
+  "item": [
+    {
+      "id": "99e9764a-7425-4363-bcbc-4682bb1b35b7",
+      "name": "Positions",
+      "description": {
+        "content": "Portfolio holdings and allocations",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ab321840-58d8-4eff-8028-9920082e77b2",
+          "name": "Veli Get Positions",
+          "request": {
+            "name": "Veli Get Positions",
+            "description": {
+              "content": "Returns current asset positions in a portfolio including quantity, average cost, current value, unrealized P&L, and percentage allocation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "portfolios",
+                ":portfolioId",
+                "positions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "portfolioId",
+                  "description": "(Required) Portfolio identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "17faa32f-1ce2-47f8-b8b1-f9ffa2a4e3e2",
+              "name": "Current portfolio positions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolios",
+                    ":portfolioId",
+                    "positions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "portfolioId",
+                      "description": "(Required) Portfolio identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"portfolioId\": \"port-abc123\",\n  \"positions\": [\n    {\n      \"symbol\": \"BTC\",\n      \"quantity\": 0.045,\n      \"averageCost\": 42000,\n      \"currentPrice\": 68000,\n      \"currentValue\": 3060,\n      \"unrealizedPnL\": 1170,\n      \"allocationPct\": 0.583\n    },\n    {\n      \"symbol\": \"ETH\",\n      \"quantity\": 1.15,\n      \"averageCost\": 1800,\n      \"currentPrice\": 1900,\n      \"currentValue\": 2185,\n      \"unrealizedPnL\": 115,\n      \"allocationPct\": 0.416\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7293cb95-d1d5-41de-a8ac-c3a8916d3361",
+              "name": "Portfolio not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolios",
+                    ":portfolioId",
+                    "positions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "portfolioId",
+                      "description": "(Required) Portfolio identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.veli.io/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "400b0554-42ec-47c8-a5ab-8e48f2cd3f98",
+    "name": "Veli Orders Positions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Veli API enables financial platforms and crypto exchanges to integrate automated investment strategies for their users. Partners retain custody and execution while Veli handles strategy logic, rebalancing signals, fee collection, and performance reporting for crypto portfolios.\n\nContact Support:\n Name: Veli Support",
+      "type": "text/plain"
+    }
+  }
+}

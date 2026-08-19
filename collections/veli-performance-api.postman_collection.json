@@ -1,0 +1,205 @@
+{
+  "item": [
+    {
+      "id": "ce779cc4-e3b1-407d-b661-db71ce2a6a7f",
+      "name": "Performance",
+      "description": {
+        "content": "Portfolio performance and returns",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "46d2a294-0112-4191-b94e-6e6f8fa58010",
+          "name": "Veli Get Performance",
+          "request": {
+            "name": "Veli Get Performance",
+            "description": {
+              "content": "Returns portfolio performance metrics including total return, annualized return, Sharpe ratio, and time-series data for specified date ranges.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "portfolios",
+                ":portfolioId",
+                "performance"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "period",
+                  "value": "1m",
+                  "description": "Time period: 1d, 7d, 1m, 3m, 1y, all"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "portfolioId",
+                  "description": "(Required) Portfolio identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5332b9cd-277e-4860-8e18-3e4a16365a65",
+              "name": "Portfolio performance metrics",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolios",
+                    ":portfolioId",
+                    "performance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "period",
+                      "value": "1m"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "portfolioId",
+                      "description": "(Required) Portfolio identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"portfolioId\": \"port-abc123\",\n  \"period\": \"1m\",\n  \"totalReturn\": 0.08,\n  \"annualizedReturn\": 0.96,\n  \"sharpeRatio\": 1.8,\n  \"startValue\": 4861.81,\n  \"endValue\": 5250.75\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "545c700d-6544-4e5c-a1ae-49ed0116eaea",
+              "name": "Portfolio not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolios",
+                    ":portfolioId",
+                    "performance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "period",
+                      "value": "1m"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "portfolioId",
+                      "description": "(Required) Portfolio identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.veli.io/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "98a292b9-3120-4934-856f-ef466c96d311",
+    "name": "Veli Orders Performance API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Veli API enables financial platforms and crypto exchanges to integrate automated investment strategies for their users. Partners retain custody and execution while Veli handles strategy logic, rebalancing signals, fee collection, and performance reporting for crypto portfolios.\n\nContact Support:\n Name: Veli Support",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Veli Orders Portfolios API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Portfolios",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Veli List Portfolios",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.veli.io/v1/portfolios",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "Filter portfolios by end-user ID"
+              },
+              {
+                "name": "strategyId",
+                "value": "",
+                "type": "query",
+                "description": "Filter portfolios by strategy"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns all portfolios for the authenticated partner, with portfolio values, strategy, and performance summary for each."
+        },
+        {
+          "info": {
+            "name": "Veli Create Portfolio",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.veli.io/v1/portfolios",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new investment portfolio for an end-user, assigning it to a strategy and setting an initial investment amount. Returns the portfolio ID and initial buy orders to execute."
+        },
+        {
+          "info": {
+            "name": "Veli Get Portfolio",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.veli.io/v1/portfolios/:portfolioId",
+            "params": [
+              {
+                "name": "portfolioId",
+                "value": "port-abc123",
+                "type": "path",
+                "description": "Portfolio identifier"
+              }
+            ]
+          },
+          "docs": "Returns complete portfolio details including current value, asset allocations, positions, performance metrics, and transaction history."
+        },
+        {
+          "info": {
+            "name": "Veli Close Portfolio",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.veli.io/v1/portfolios/:portfolioId",
+            "params": [
+              {
+                "name": "portfolioId",
+                "value": "",
+                "type": "path",
+                "description": "Portfolio identifier"
+              }
+            ]
+          },
+          "docs": "Closes a portfolio and liquidates all positions. Returns sell orders to execute to return funds to the user."
+        },
+        {
+          "info": {
+            "name": "Veli Rebalance Portfolio",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.veli.io/v1/portfolios/:portfolioId/rebalance",
+            "params": [
+              {
+                "name": "portfolioId",
+                "value": "",
+                "type": "path",
+                "description": "Portfolio identifier"
+              }
+            ]
+          },
+          "docs": "Triggers a manual rebalance of the portfolio to restore target allocations. Returns buy and sell orders to execute to achieve the target allocation."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

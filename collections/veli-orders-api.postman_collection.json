@@ -1,0 +1,188 @@
+{
+  "item": [
+    {
+      "id": "de752ec8-d369-4a3c-bcd0-01e56a569778",
+      "name": "Orders",
+      "description": {
+        "content": "Buy/sell order execution signals",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5deb4a1d-5102-4fb9-af06-3e643dbbc683",
+          "name": "Veli Rebalance Portfolio",
+          "request": {
+            "name": "Veli Rebalance Portfolio",
+            "description": {
+              "content": "Triggers a manual rebalance of the portfolio to restore target allocations. Returns buy and sell orders to execute to achieve the target allocation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "portfolios",
+                ":portfolioId",
+                "rebalance"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "portfolioId",
+                  "description": "(Required) Portfolio identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "72da1726-37c2-4a44-8956-63475c13b931",
+              "name": "Rebalancing orders generated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolios",
+                    ":portfolioId",
+                    "rebalance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "portfolioId",
+                      "description": "(Required) Portfolio identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"portfolioId\": \"port-abc123\",\n  \"orders\": [\n    {\n      \"side\": \"sell\",\n      \"symbol\": \"BTC\",\n      \"quantity\": 0.005,\n      \"estimatedValue\": 340\n    },\n    {\n      \"side\": \"buy\",\n      \"symbol\": \"ETH\",\n      \"quantity\": 0.18,\n      \"estimatedValue\": 342\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5420875d-a222-4077-876e-e5ad303b2aa6",
+              "name": "Portfolio not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolios",
+                    ":portfolioId",
+                    "rebalance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "portfolioId",
+                      "description": "(Required) Portfolio identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.veli.io/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "4409fd36-9a65-4aa2-8e9a-eaf8aa13348f",
+    "name": "Veli Orders API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Veli API enables financial platforms and crypto exchanges to integrate automated investment strategies for their users. Partners retain custody and execution while Veli handles strategy logic, rebalancing signals, fee collection, and performance reporting for crypto portfolios.\n\nContact Support:\n Name: Veli Support",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Veli Orders Positions API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Positions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Veli Get Positions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.veli.io/v1/portfolios/:portfolioId/positions",
+            "params": [
+              {
+                "name": "portfolioId",
+                "value": "port-abc123",
+                "type": "path",
+                "description": "Portfolio identifier"
+              }
+            ]
+          },
+          "docs": "Returns current asset positions in a portfolio including quantity, average cost, current value, unrealized P&L, and percentage allocation."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

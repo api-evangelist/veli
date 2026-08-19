@@ -1,0 +1,49 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Veli Orders Performance API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Performance",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Veli Get Performance",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.veli.io/v1/portfolios/:portfolioId/performance",
+            "params": [
+              {
+                "name": "portfolioId",
+                "value": "port-abc123",
+                "type": "path",
+                "description": "Portfolio identifier"
+              },
+              {
+                "name": "period",
+                "value": "",
+                "type": "query",
+                "description": "Time period: 1d, 7d, 1m, 3m, 1y, all"
+              }
+            ]
+          },
+          "docs": "Returns portfolio performance metrics including total return, annualized return, Sharpe ratio, and time-series data for specified date ranges."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

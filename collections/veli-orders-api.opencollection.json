@@ -1,0 +1,43 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Veli Orders API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Orders",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Veli Rebalance Portfolio",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.veli.io/v1/portfolios/:portfolioId/rebalance",
+            "params": [
+              {
+                "name": "portfolioId",
+                "value": "",
+                "type": "path",
+                "description": "Portfolio identifier"
+              }
+            ]
+          },
+          "docs": "Triggers a manual rebalance of the portfolio to restore target allocations. Returns buy and sell orders to execute to achieve the target allocation."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

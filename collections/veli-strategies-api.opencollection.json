@@ -1,0 +1,78 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Veli Orders Strategies API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Strategies",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Veli List Strategies",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.veli.io/v1/strategies",
+            "params": [
+              {
+                "name": "category",
+                "value": "",
+                "type": "query",
+                "description": "Filter by strategy category: index, theme, or custom"
+              },
+              {
+                "name": "risk",
+                "value": "",
+                "type": "query",
+                "description": "Filter by risk level: conservative, moderate, aggressive"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns all available investment strategies including index funds, theme portfolios, and custom strategies. Each strategy includes allocation weights, rebalancing rules, and performance history."
+        },
+        {
+          "info": {
+            "name": "Veli Get Strategy",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.veli.io/v1/strategies/:strategyId",
+            "params": [
+              {
+                "name": "strategyId",
+                "value": "strat-btc-eth-index",
+                "type": "path",
+                "description": "Strategy identifier"
+              }
+            ]
+          },
+          "docs": "Returns complete details for a specific investment strategy including asset allocation, rebalancing rules, fee structure, and performance metrics."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

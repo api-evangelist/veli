@@ -1,0 +1,843 @@
+{
+  "item": [
+    {
+      "id": "31b5d5c0-a8e0-4b95-88c1-7d94c538c070",
+      "name": "Portfolios",
+      "description": {
+        "content": "User portfolio creation and management",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "be95fc82-e1c3-4c74-a2b0-31c5e41dbb7a",
+          "name": "Veli List Portfolios",
+          "request": {
+            "name": "Veli List Portfolios",
+            "description": {
+              "content": "Returns all portfolios for the authenticated partner, with portfolio values, strategy, and performance summary for each.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "portfolios"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "userId",
+                  "value": "<string>",
+                  "description": "Filter portfolios by end-user ID"
+                },
+                {
+                  "disabled": false,
+                  "key": "strategyId",
+                  "value": "<string>",
+                  "description": "Filter portfolios by strategy"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4ac728ad-aca1-48f2-9de8-972d0b232717",
+              "name": "List of portfolios",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolios"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "strategyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"portfolios\": [\n    {\n      \"id\": \"port-abc123\",\n      \"userId\": \"user-xyz789\",\n      \"strategyId\": \"strat-btc-eth-index\",\n      \"status\": \"active\",\n      \"totalValue\": 5250.75,\n      \"currency\": \"USD\",\n      \"createdAt\": \"2025-01-15T09:00:00Z\"\n    }\n  ],\n  \"total\": 1\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "866325b1-a9ec-459a-a7ba-9aa64cff8e7a",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolios"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "strategyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a8d2662c-61d9-4d96-a706-7245a5540348",
+          "name": "Veli Create Portfolio",
+          "request": {
+            "name": "Veli Create Portfolio",
+            "description": {
+              "content": "Creates a new investment portfolio for an end-user, assigning it to a strategy and setting an initial investment amount. Returns the portfolio ID and initial buy orders to execute.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "portfolios"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"<string>\",\n  \"strategyId\": \"<string>\",\n  \"initialAmount\": \"<number>\",\n  \"currency\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "66a12b1a-9e5a-4595-b38c-22cc77314cf7",
+              "name": "Portfolio created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolios"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"user-xyz789\",\n  \"strategyId\": \"strat-btc-eth-index\",\n  \"initialAmount\": 1000,\n  \"currency\": \"USD\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"port-abc123\",\n  \"userId\": \"user-xyz789\",\n  \"strategyId\": \"strat-btc-eth-index\",\n  \"status\": \"active\",\n  \"totalValue\": 1000,\n  \"currency\": \"USD\",\n  \"createdAt\": \"2026-05-03T10:00:00Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2afa3021-a757-4775-b473-00c181ca32b4",
+              "name": "Invalid request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolios"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"user-xyz789\",\n  \"strategyId\": \"strat-btc-eth-index\",\n  \"initialAmount\": 1000,\n  \"currency\": \"USD\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "485bb6e2-42de-4bd9-a865-5848feed0f6d",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolios"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"user-xyz789\",\n  \"strategyId\": \"strat-btc-eth-index\",\n  \"initialAmount\": 1000,\n  \"currency\": \"USD\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3a975aa5-38d3-4fe1-b179-9bca49e521d6",
+          "name": "Veli Get Portfolio",
+          "request": {
+            "name": "Veli Get Portfolio",
+            "description": {
+              "content": "Returns complete portfolio details including current value, asset allocations, positions, performance metrics, and transaction history.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "portfolios",
+                ":portfolioId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "portfolioId",
+                  "description": "(Required) Portfolio identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d022344a-f177-42cd-895b-04a9b0dd98ec",
+              "name": "Portfolio details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolios",
+                    ":portfolioId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "portfolioId",
+                      "description": "(Required) Portfolio identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"port-abc123\",\n  \"userId\": \"user-xyz789\",\n  \"strategyId\": \"strat-btc-eth-index\",\n  \"status\": \"active\",\n  \"totalValue\": 5250.75,\n  \"currency\": \"USD\",\n  \"createdAt\": \"2025-01-15T09:00:00Z\",\n  \"updatedAt\": \"2026-05-03T08:00:00Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "759e3703-f4a4-40a0-835b-8b728df06eac",
+              "name": "Portfolio not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolios",
+                    ":portfolioId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "portfolioId",
+                      "description": "(Required) Portfolio identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0b5ba784-47ac-42ff-8650-8332fbc394f5",
+          "name": "Veli Close Portfolio",
+          "request": {
+            "name": "Veli Close Portfolio",
+            "description": {
+              "content": "Closes a portfolio and liquidates all positions. Returns sell orders to execute to return funds to the user.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "portfolios",
+                ":portfolioId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "portfolioId",
+                  "description": "(Required) Portfolio identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "be69bd28-8064-4139-b8be-202e2fe1e2cd",
+              "name": "Portfolio closed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolios",
+                    ":portfolioId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "portfolioId",
+                      "description": "(Required) Portfolio identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"portfolioId\": \"string\",\n  \"status\": \"closed\",\n  \"liquidationOrders\": [\n    {\n      \"side\": \"sell\",\n      \"symbol\": \"BTC\",\n      \"quantity\": 0.005,\n      \"estimatedValue\": 340\n    },\n    {\n      \"side\": \"sell\",\n      \"symbol\": \"BTC\",\n      \"quantity\": 0.005,\n      \"estimatedValue\": 340\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "51194893-584d-4dcd-8e27-003a477ee410",
+              "name": "Portfolio not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolios",
+                    ":portfolioId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "portfolioId",
+                      "description": "(Required) Portfolio identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "58604aa4-d674-45e8-bf25-006cf25f178b",
+          "name": "Veli Rebalance Portfolio",
+          "request": {
+            "name": "Veli Rebalance Portfolio",
+            "description": {
+              "content": "Triggers a manual rebalance of the portfolio to restore target allocations. Returns buy and sell orders to execute to achieve the target allocation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "portfolios",
+                ":portfolioId",
+                "rebalance"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "portfolioId",
+                  "description": "(Required) Portfolio identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "bb45d9c1-3511-468c-804a-2582da133004",
+              "name": "Rebalancing orders generated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolios",
+                    ":portfolioId",
+                    "rebalance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "portfolioId",
+                      "description": "(Required) Portfolio identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"portfolioId\": \"port-abc123\",\n  \"orders\": [\n    {\n      \"side\": \"sell\",\n      \"symbol\": \"BTC\",\n      \"quantity\": 0.005,\n      \"estimatedValue\": 340\n    },\n    {\n      \"side\": \"buy\",\n      \"symbol\": \"ETH\",\n      \"quantity\": 0.18,\n      \"estimatedValue\": 342\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d4ef2a6b-6055-42be-a70c-3d63d6080a2e",
+              "name": "Portfolio not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolios",
+                    ":portfolioId",
+                    "rebalance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "portfolioId",
+                      "description": "(Required) Portfolio identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.veli.io/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "f8df369e-350f-48c6-bb2d-ff3da7e68e8b",
+    "name": "Veli Orders Portfolios API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Veli API enables financial platforms and crypto exchanges to integrate automated investment strategies for their users. Partners retain custody and execution while Veli handles strategy logic, rebalancing signals, fee collection, and performance reporting for crypto portfolios.\n\nContact Support:\n Name: Veli Support",
+      "type": "text/plain"
+    }
+  }
+}

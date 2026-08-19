@@ -1,0 +1,359 @@
+{
+  "item": [
+    {
+      "id": "8f5e736e-1c9c-422c-a96b-53fb0dd7e234",
+      "name": "Strategies",
+      "description": {
+        "content": "Investment strategy catalog and configuration",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e3cc4cf4-9844-4f25-a204-e4bf7a0ff172",
+          "name": "Veli List Strategies",
+          "request": {
+            "name": "Veli List Strategies",
+            "description": {
+              "content": "Returns all available investment strategies including index funds, theme portfolios, and custom strategies. Each strategy includes allocation weights, rebalancing rules, and performance history.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "strategies"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "category",
+                  "value": "<string>",
+                  "description": "Filter by strategy category: index, theme, or custom"
+                },
+                {
+                  "disabled": false,
+                  "key": "risk",
+                  "value": "<string>",
+                  "description": "Filter by risk level: conservative, moderate, aggressive"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "970048fc-d5ee-48af-8f44-3394a083b8e3",
+              "name": "List of investment strategies",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "strategies"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "category",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "risk",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"strategies\": [\n    {\n      \"id\": \"strat-btc-eth-index\",\n      \"name\": \"BTC-ETH Index\",\n      \"description\": \"Market-cap weighted index of Bitcoin and Ethereum\",\n      \"category\": \"index\",\n      \"risk\": \"moderate\",\n      \"assets\": [\n        {\n          \"symbol\": \"BTC\",\n          \"weight\": 0.6\n        },\n        {\n          \"symbol\": \"ETH\",\n          \"weight\": 0.4\n        }\n      ],\n      \"rebalanceThreshold\": 0.05,\n      \"performanceYTD\": 0.23\n    }\n  ],\n  \"total\": 1\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9448edc8-ca3e-4cd0-818c-b3a3c9db1701",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "strategies"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "category",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "risk",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c1df1a76-ea9f-4748-b4e5-9c72c78bc135",
+          "name": "Veli Get Strategy",
+          "request": {
+            "name": "Veli Get Strategy",
+            "description": {
+              "content": "Returns complete details for a specific investment strategy including asset allocation, rebalancing rules, fee structure, and performance metrics.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "strategies",
+                ":strategyId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "strategyId",
+                  "description": "(Required) Strategy identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "01dffb6f-26ba-4335-b05d-13838f21d24c",
+              "name": "Strategy details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "strategies",
+                    ":strategyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "strategyId",
+                      "description": "(Required) Strategy identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"strat-btc-eth-index\",\n  \"name\": \"BTC-ETH Index\",\n  \"description\": \"Market-cap weighted index of Bitcoin and Ethereum\",\n  \"category\": \"index\",\n  \"risk\": \"moderate\",\n  \"assets\": [\n    {\n      \"symbol\": \"BTC\",\n      \"weight\": 0.6,\n      \"name\": \"Bitcoin\"\n    },\n    {\n      \"symbol\": \"ETH\",\n      \"weight\": 0.4,\n      \"name\": \"Ethereum\"\n    }\n  ],\n  \"rebalanceThreshold\": 0.05,\n  \"managementFee\": 0.01,\n  \"performanceYTD\": 0.23,\n  \"performanceAllTime\": 1.45\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4ff14a0c-622b-49f8-93a9-bd8b25f37a22",
+              "name": "Strategy not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "strategies",
+                    ":strategyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "strategyId",
+                      "description": "(Required) Strategy identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.veli.io/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "6493f71d-00e0-4d0b-85ca-129ace437e70",
+    "name": "Veli Orders Strategies API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Veli API enables financial platforms and crypto exchanges to integrate automated investment strategies for their users. Partners retain custody and execution while Veli handles strategy logic, rebalancing signals, fee collection, and performance reporting for crypto portfolios.\n\nContact Support:\n Name: Veli Support",
+      "type": "text/plain"
+    }
+  }
+}
