@@ -26,6 +26,12 @@ tags:
   - DeFi
   - Finance
   - Investment
+  - Portfolio-Management
+tags_raw:
+  - Crypto
+  - DeFi
+  - Finance
+  - Investment
   - Portfolio Management
 url: https://raw.githubusercontent.com/api-evangelist/veli/refs/heads/main/apis.yml
 created: '2026-03-16'
@@ -37,6 +43,8 @@ apis:
   description: Buy/sell order execution signals
   humanURL: https://veli.io/
   tags:
+  - Order
+  tags_raw:
   - Orders
   properties:
   - type: OpenAPI
@@ -147,6 +155,8 @@ apis:
   description: User portfolio creation and management
   humanURL: https://veli.io/
   tags:
+  - Portfolio
+  tags_raw:
   - Portfolios
   properties:
   - type: OpenAPI
