@@ -17,6 +17,13 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
+  "notes": [
+    "veli-orders-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "veli-performance-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "veli-portfolios-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "veli-positions-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "veli-strategies-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
   "skipped": []
 }
