@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Veli Orders Positions API
+  title: Veli Positions API
   description: The Veli API enables financial platforms and crypto exchanges to integrate automated investment strategies for their users. Partners retain custody and execution while Veli handles strategy logic, rebalancing signals, fee collection, and performance reporting for crypto portfolios.
   version: '1.0'
   contact:
@@ -69,15 +69,6 @@ paths:
         dispatcher: FALLBACK
 components:
   schemas:
-    PositionListResponse:
-      type: object
-      properties:
-        portfolioId:
-          type: string
-        positions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Position'
     Position:
       type: object
       description: Current asset position in a portfolio
@@ -110,6 +101,15 @@ components:
           type: number
           description: Actual allocation percentage
           example: 0.583
+    PositionListResponse:
+      type: object
+      properties:
+        portfolioId:
+          type: string
+        positions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Position'
   securitySchemes:
     BearerAuth:
       type: http

@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Veli Orders Performance API
+  title: Veli Performance API
   description: The Veli API enables financial platforms and crypto exchanges to integrate automated investment strategies for their users. Partners retain custody and execution while Veli handles strategy logic, rebalancing signals, fee collection, and performance reporting for crypto portfolios.
   version: '1.0'
   contact:

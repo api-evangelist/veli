@@ -1,11 +1,7 @@
 {
   "provider": "veli",
   "sources": [
-    "veli-orders-api-openapi.yml",
-    "veli-performance-api-openapi.yml",
-    "veli-portfolios-api-openapi.yml",
-    "veli-positions-api-openapi.yml",
-    "veli-strategies-api-openapi.yml"
+    "_ae-authored/veli-openapi.yml"
   ],
   "outputs": [
     "veli-orders-api-openapi.yml",
@@ -18,12 +14,15 @@
   "errors": [],
   "warnings": [],
   "notes": [
-    "veli-orders-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "veli-performance-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "veli-portfolios-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "veli-positions-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "veli-strategies-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "sourced from openapi/_original/ (0 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "veli-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "apis.yml register: already-registered"
   ],
-  "skipped": []
+  "skipped": [
+    "veli-orders-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "veli-performance-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "veli-portfolios-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "veli-positions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "veli-strategies-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
