@@ -62,15 +62,6 @@ paths:
         dispatcher: FALLBACK
 components:
   schemas:
-    RebalanceResponse:
-      type: object
-      properties:
-        portfolioId:
-          type: string
-        orders:
-          type: array
-          items:
-            $ref: '#/components/schemas/Order'
     Order:
       type: object
       description: Buy or sell order signal from Veli strategy engine
@@ -94,6 +85,15 @@ components:
           type: number
           description: Estimated order value in base currency
           example: 340.0
+    RebalanceResponse:
+      type: object
+      properties:
+        portfolioId:
+          type: string
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
   securitySchemes:
     BearerAuth:
       type: http
