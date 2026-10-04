@@ -137,6 +137,15 @@ paths:
         dispatcher: FALLBACK
 components:
   schemas:
+    StrategyListResponse:
+      type: object
+      properties:
+        strategies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Strategy'
+        total:
+          type: integer
     Strategy:
       type: object
       description: Investment strategy definition with allocations and rules
@@ -207,15 +216,6 @@ components:
           minimum: 0
           maximum: 1
           example: 0.6
-    StrategyListResponse:
-      type: object
-      properties:
-        strategies:
-          type: array
-          items:
-            $ref: '#/components/schemas/Strategy'
-        total:
-          type: integer
   securitySchemes:
     BearerAuth:
       type: http

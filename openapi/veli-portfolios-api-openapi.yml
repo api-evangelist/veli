@@ -228,27 +228,6 @@ paths:
         dispatcher: FALLBACK
 components:
   schemas:
-    ClosePortfolioResponse:
-      type: object
-      properties:
-        portfolioId:
-          type: string
-        status:
-          type: string
-          example: closed
-        liquidationOrders:
-          type: array
-          items:
-            $ref: '#/components/schemas/Order'
-    PortfolioListResponse:
-      type: object
-      properties:
-        portfolios:
-          type: array
-          items:
-            $ref: '#/components/schemas/Portfolio'
-        total:
-          type: integer
     RebalanceResponse:
       type: object
       properties:
@@ -346,6 +325,27 @@ components:
           type: string
           description: Currency of the initial investment
           example: USD
+    ClosePortfolioResponse:
+      type: object
+      properties:
+        portfolioId:
+          type: string
+        status:
+          type: string
+          example: closed
+        liquidationOrders:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+    PortfolioListResponse:
+      type: object
+      properties:
+        portfolios:
+          type: array
+          items:
+            $ref: '#/components/schemas/Portfolio'
+        total:
+          type: integer
   securitySchemes:
     BearerAuth:
       type: http

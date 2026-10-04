@@ -69,6 +69,15 @@ paths:
         dispatcher: FALLBACK
 components:
   schemas:
+    PositionListResponse:
+      type: object
+      properties:
+        portfolioId:
+          type: string
+        positions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Position'
     Position:
       type: object
       description: Current asset position in a portfolio
@@ -101,15 +110,6 @@ components:
           type: number
           description: Actual allocation percentage
           example: 0.583
-    PositionListResponse:
-      type: object
-      properties:
-        portfolioId:
-          type: string
-        positions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Position'
   securitySchemes:
     BearerAuth:
       type: http
