@@ -137,15 +137,24 @@ paths:
         dispatcher: FALLBACK
 components:
   schemas:
-    StrategyListResponse:
+    AssetAllocation:
       type: object
+      description: Asset allocation within a strategy
       properties:
-        strategies:
-          type: array
-          items:
-            $ref: '#/components/schemas/Strategy'
-        total:
-          type: integer
+        symbol:
+          type: string
+          description: Crypto asset symbol
+          example: BTC
+        name:
+          type: string
+          description: Asset name
+          example: Bitcoin
+        weight:
+          type: number
+          description: Target allocation weight (0-1)
+          minimum: 0
+          maximum: 1
+          example: 0.6
     Strategy:
       type: object
       description: Investment strategy definition with allocations and rules
@@ -198,24 +207,15 @@ components:
           type: number
           description: All-time return
           example: 1.45
-    AssetAllocation:
+    StrategyListResponse:
       type: object
-      description: Asset allocation within a strategy
       properties:
-        symbol:
-          type: string
-          description: Crypto asset symbol
-          example: BTC
-        name:
-          type: string
-          description: Asset name
-          example: Bitcoin
-        weight:
-          type: number
-          description: Target allocation weight (0-1)
-          minimum: 0
-          maximum: 1
-          example: 0.6
+        strategies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Strategy'
+        total:
+          type: integer
   securitySchemes:
     BearerAuth:
       type: http
